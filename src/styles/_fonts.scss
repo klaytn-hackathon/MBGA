@@ -1,0 +1,8 @@
+@import 'colors.scss';
+
+@mixin font-style($type) {
+  @if $type == 'h1' { font-size: 32px; font-weight: 600; }
+  @if $type == 'h2' { font-size: 28px; font-weight: 600; }
+  @if $type == 'body-title' { font-size: 18px; font-weight: 500; }
+  @if $type == 'caption' { font-size: 11px; font-weight: 500; }
+}

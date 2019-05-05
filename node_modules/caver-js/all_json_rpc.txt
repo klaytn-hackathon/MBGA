@@ -1,0 +1,110 @@
+* rpc calls
+
+web3-core-method
+(제멋대로 정의해놓은 케이스. - json화 어려움.)
+call: 'klay_getTransactionReceipt'
+call: 'klay_getCode'
+call: 'klay_gasPrice'
+
+caver-klay-contract
+(살짝 제멋대로 정의해놓은 케이스. - json화 어려움.)
+call: 'klay_getLogs'
+call: 'klay_estimateGas'
+call: 'klay_call'
+call: 'klay_sendTransaction'
+
+caver-klay-accounts
+(Accounts constructor에서 _ethereumCalls 돌면서 달아주는 방식. - json화 쉬움.)
+call: 'net_version'
+call: 'klay_gasPrice'
+call: 'klay_getTransactionCount'
+
+caver-klay-personal
+(Personal constructor에서 methods 돌면서 달아주는 방식. - json화 쉬움.)
+call: 'personal_listAccounts' // special
+call: 'personal_newAccount' // special
+call: 'personal_unlockAccount' // special
+call: 'personal_lockAccount' // special
+call: 'personal_importRawKey' // special
+call: 'personal_sendTransaction' // special
+call: 'personal_signTransaction' // special
+call: 'personal_sign' // special
+call: 'personal_ecRecover' // special
+
+caver-klay
+(constructor에 methods 돌면서 달아주는 방식. - json화 쉬움.)
+call: 'klay_call'
+call: 'klay_estimateGas'
+call: 'klay_gasPrice'
+call: 'klay_getCode'
+call: 'klay_getTransactionReceipt'
+call: 'klay_getTransactionCount'
+call: 'klay_sendTransaction'
+call: 'klay_getLogs'
+call: 'web3_clientVersion' // special
+call: 'klay_protocolVersion' // special
+call: 'klay_coinbase' // special
+call: 'klay_mining' // special
+call: 'klay_hashrate' // special
+call: 'klay_syncing' // special
+call: 'klay_accounts' // special
+call: 'klay_blockNumber' // special
+call: 'klay_getBalance' // special
+call: 'klay_getStorageAt' // special
+call: 'klay_getTransactionByHash' // special
+call: 'klay_sendRawTransaction' // special
+call: 'klay_signTransaction' // special
+call: 'klay_sign' // special
+call: 'klay_getCompilers' // special
+call: 'klay_compileSolidity' // special
+call: 'klay_compileLLL' // special
+call: 'klay_compileSerpent' // special
+call: 'klay_submitWork' // special
+call: 'klay_getWork' // special
+
+web3-net
+(constructor에 methods 돌면서 달아주는 방식. - json화 쉬움.)
+call: 'net_version'
+call: 'net_listening' // special
+call: 'net_peerCount' // special
+
+=>
+`web3-core-method`, `caver-klay-contract`
+요 두놈에 붙어있는 rpc 콜들 어떻게 json화 시킬지 고민.
+@todo 근데 굳이 여기서 각 instance 마다 새로 정의해서 붙일게 아니라,
+rpc.js에 갖다 쓰는 방식으로 하면 굳이 새로 정의 안해도 되고 그게 차라리 나을듯한데.
+그럼 이런 정의에 대한 고민 안해도 될 것 같다.
+
+* 그 다음으로 Method의 options로 오는 애들.(쩌리들)
+requestManager, accounts, defaultAccount, defaultBlock 얘네 다 딱 3 군데에서 쓰인다.
+
+caver-klay-contract 파일에,
+'klay_estimateGas',
+'klay_call',
+'klay_sendTransaction',
+
+1)requestManager
+Method instance 정의할 때 requestManager가 필요한 경우는, 딱 3 군데
+
+'klay_estimateGas',
+'klay_call',
+'klay_sendTransaction',
+@todo 근데 굳이 Method에 붙여줘야 할까? 안 붙여도 될거같은데, 충분히 requesgManager 다른 곳에서 가져올 수 있을 것이고..
+
+2)accounts
+requestManager의 경우와 같음. 딱 3 군데
+'klay_estimateGas',
+'klay_call',
+'klay_sendTransaction',
+@todo 근데 굳이 Method에 붙여줘야하는 이유가 있나? , wallet signing 때문에 필요하다고하는데,
+아니 call이나 estimateGas할 때도 signing이 필요한가?
+```
+accounts: klayAccounts, // is klay.accounts (necessary for wallet signing)
+```
+이렇게 되어있는데,
+
+3)defaultAccount
+4)defaultBlock
+위와 마찬가지.
+
+결론: 굳이 options에 넣어서 쓸 필요 없다. -> 나중에 json화 할 때, json에 굳이 넣어서 쓸 필요 없음.
