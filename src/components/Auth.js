@@ -37,7 +37,7 @@ class Auth extends Component {
       keystore: '',
       privateKey: '',
       password: '',
-      keystoreMsg: ''
+      keystoreMsg: '',
     })
   }
 
@@ -155,7 +155,7 @@ class Auth extends Component {
   toggleAccessType = () => {
     const { accessType } = this.state
     this.setState({
-      accessType: accessType === 'privateKey' ? 'keystore' : 'privateKey'
+      accessType: accessType === 'privateKey' ? 'keystore' : 'privateKey',
     }, this.reset)
   }
 

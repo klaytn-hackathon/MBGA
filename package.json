@@ -1,7 +1,7 @@
 {
-  "name": "klay-dapp-boilerplate",
+  "name": "dodo-klaytn",
   "version": "0.0.1",
-  "description": "boilerplate for klaytn-based app",
+  "description": "klaytn-based app",
   "main": "truffle-config.js",
   "directories": {
     "test": "test"
@@ -17,7 +17,7 @@
   "repository": {
     "type": "git"
   },
-  "author": "nujabes403",
+  "author": "currybab",
   "license": "GPL-3.0",
   "dependencies": {
     "caver-js": "0.0.2-r",

@@ -41,20 +41,21 @@
  * You don't need to set `provider` option.
  */
 
-const PrivateKeyConnector = require('connect-privkey-to-provider')
+const PrivateKeyConnector = require('connect-privkey-to-provider');
+const path = require('path');
 
 /**
  * truffle network variables
  * for deploying contract to klaytn network.
  */
-const NETWORK_ID = '1001'
-const GASLIMIT = '20000000'
+const NETWORK_ID = '1001';
+const GASLIMIT = '20000000';
 
 /**
  * parameters for DEPLOY METHOD 1(By private key)
  */
-const URL = `https://api.baobab.klaytn.net:8651`
-const PRIVATE_KEY = '0x48f5a77dbf13b436ae0325ae91efd084430d2da1123a8c273d7df5009248f90c'
+const URL = 'https://api.baobab.klaytn.net:8651';
+const PRIVATE_KEY = '0x48f5a77dbf13b436ae0325ae91efd084430d2da1123a8c273d7df5009248f90c';
 
 /**
  * parameters for DEPLOY METHOD 2(By unlocked account)
@@ -72,6 +73,7 @@ const PRIVATE_KEY = '0x48f5a77dbf13b436ae0325ae91efd084430d2da1123a8c273d7df5009
  * @param {string} gas - Upper limit of gas for deploying.
  */
 module.exports = {
+  contracts_build_directory: path.join(__dirname, 'src/contracts'),
   networks: {
     /**
      * DEPLOY METHOD 1: By private key.
@@ -96,4 +98,4 @@ module.exports = {
     //   gasPrice: null,
     // },
   },
-}
+};

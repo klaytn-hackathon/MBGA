@@ -15,7 +15,7 @@ switch (process.env.ENV) {
   case 'LOCAL':
   case 'REAL':
     envPath = ENV_DIR + `${process.env.ENV}`.toLowerCase() + '.env'
-    break
+    break;
 }
 
 module.exports = {
@@ -81,7 +81,7 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
-      DEPLOYED_ADDRESS: JSON.stringify(fs.readFileSync('deployedAddress', 'utf8').replace(/\n|\r/g, "")),
+      DEPLOYED_ADDRESS: JSON.stringify(fs.readFileSync('deployedAddress', 'utf8').replace(/\n|\r/g, '')),
       DEPLOYED_ABI: fs.existsSync('deployedABI') && fs.readFileSync('deployedABI', 'utf8'),
     }),
     new Dotenv({
