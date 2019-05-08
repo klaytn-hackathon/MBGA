@@ -1,12 +1,12 @@
 import React from 'react'
 import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 
-import Count from 'components/Count'
+import Login from 'components/Login'
 
 const renderRoutes = rootComponent => (
   <Router history={browserHistory}>
     <Route component={rootComponent}>
-      <Route path="/" component={Count} />
+      <Route path="/" component={Login} />
     </Route>
   </Router>
 )

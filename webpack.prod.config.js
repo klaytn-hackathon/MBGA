@@ -99,10 +99,10 @@ module.exports = {
     extractCSS,
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.DefinePlugin({
-      DEPLOYED_ADDRESS: JSON.stringify(fs.readFileSync('deployedAddress', 'utf8').replace(/\n|\r/g, "")),
-      DEPLOYED_ABI: fs.existsSync('deployedABI') && fs.readFileSync('deployedABI', 'utf8'),
-    }),
+    // new webpack.DefinePlugin({
+    //   DEPLOYED_ADDRESS: JSON.stringify(fs.readFileSync('deployedAddress', 'utf8').replace(/\n|\r/g, "")),
+    //   DEPLOYED_ABI: fs.existsSync('deployedABI') && fs.readFileSync('deployedABI', 'utf8'),
+    // }),
     new CompressionPlugin(),
     new CopyWebpackPlugin([{
       from: 'static',

@@ -1,4 +1,4 @@
-const Count = artifacts.require('./DodoRepository.sol')
+const Dodo = artifacts.require('./DodoRepository.sol')
 const fs = require('fs')
 
 module.exports = function (deployer) {

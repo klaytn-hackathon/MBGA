@@ -1,13 +1,19 @@
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react-dom';
+import React from 'react';
+import { Provider } from 'mobx-react';
 
-import App from './App'
-import renderRoutes from './routes'
+import App from './App';
+import renderRoutes from './routes';
+import AuthStore from './models/AuthStore';
 
-import './index.scss'
-
+const authStore = new AuthStore();
 // Render App(root component).
 ReactDOM.render(
-  renderRoutes(App),
+  <Provider 
+    auth={authStore}
+  >
+    <App/>
+  </Provider>,
   document.getElementById('root')
 )
 

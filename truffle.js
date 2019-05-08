@@ -73,7 +73,7 @@ const PRIVATE_KEY = '0x48f5a77dbf13b436ae0325ae91efd084430d2da1123a8c273d7df5009
  * @param {string} gas - Upper limit of gas for deploying.
  */
 module.exports = {
-  contracts_build_directory: path.join(__dirname, 'src/contracts'),
+  //contracts_build_directory: path.join(__dirname, 'src/contracts'),
   networks: {
     /**
      * DEPLOY METHOD 1: By private key.
