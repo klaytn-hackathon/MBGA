@@ -64,7 +64,8 @@ contract DodoRepository {
     * @dev Created a DodoRepository
     */
     constructor() public {
-        owner = msg.sender;
+        owner = 0xbf128F013F40ec7Fdfe95d0A298E85764f628e7F;
+        refereeEntry.push(0xbf128F013F40ec7Fdfe95d0A298E85764f628e7F);
     }
 
     function () external payable {
@@ -171,6 +172,40 @@ contract DodoRepository {
         status.success = true;
         statuses[_index] = status;
         return true;
+    }
+
+    /**
+    * @dev Apply Referee
+    * @return bool result of transaction
+    */
+    function applyReferee() public returns (bool) {
+        refereeEntry.push(msg.sender);
+        return true;
+    }
+
+    /**
+    * @dev Cancel Referee
+    * @return bool result of transaction
+    */
+    function cancelReferee() public returns (bool) {
+        uint index = refereeEntry.length;
+        for (uint i = 0; i < refereeEntry.length; i++) {
+            if (refereeEntry[i] == msg.sender) {
+                index = i;
+                break;
+            }
+        }
+        refereeEntry[index] = refereeEntry[refereeEntry.length - 1];
+        refereeEntry.length--;
+        return false;
+    }
+
+    /**
+    * @dev Get Referee List
+    * @return address represents the referee list of Projects
+    */
+    function getRefereeEntry() public view returns (address[]) {
+        return refereeEntry;
     }
 
     /**
