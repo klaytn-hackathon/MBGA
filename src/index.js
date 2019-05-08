@@ -22,7 +22,7 @@ ReactDOM.render(
 if (module.hot) {
   module.hot.accept('./App.js', () => {
     const NextApp = require('./App').default
-    ReactDOM.render(renderRoutes(NextApp), document.getElementById('root'))
+    ReactDOM.render(NextApp, document.getElementById('root'))
     console.log('Hot module replaced..')
   })
 }

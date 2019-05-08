@@ -44,6 +44,10 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
       },
       {
+        test: /\.(png|jpg)$/,
+        use: ['file-loader'],
+      },
+      {
         test: /\.scss$/,
         use: extractCSS.extract({
           use: [

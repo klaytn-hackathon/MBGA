@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import cav from 'klaytn/caver';
+import { cav } from 'klaytn/caver';
 
 export default class AuthStore {
   @observable inProgress = false;
@@ -9,6 +9,7 @@ export default class AuthStore {
     privateKey: '',
     address: '',
     isLoggedIn: !!sessionStorage.getItem('walletInstance'),
+    page: 0,
   };
 
   @action 
@@ -36,6 +37,7 @@ export default class AuthStore {
       sessionStorage.setItem('walletInstance', JSON.stringify(walletInstance));
       this.values.address = walletInstance.address;
       this.values.isLoggedIn = true;
+      this.values.page = 0;
     }).catch((e) => {
       console.log(e);
       action((err) => {
@@ -45,5 +47,10 @@ export default class AuthStore {
     }).finally(() => {
       action(() => { this.inProgress = false; })
     });
+  }
+
+  @action
+  openPage(page) {
+    this.values.page = page;
   }
 };

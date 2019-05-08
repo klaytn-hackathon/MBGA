@@ -55,6 +55,10 @@ module.exports = {
         })
       },
       {
+        test: /\.(png|jpg)$/,
+        use: ['file-loader'],
+      },
+      {
         test: /\.scss$/,
         use: extractCSS.extract({
           use: [

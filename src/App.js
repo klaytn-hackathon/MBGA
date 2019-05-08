@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import Login from './components/Login';
-import LogoutBtn from './components/LogoutBtn';
+import RenderingPage from './pages/RenderingPage';
+import Header from './components/Header';
+
 @inject('auth')
 @observer
 class App extends Component {
   componentWillMount() {
+    console.log('here');
     const walletFromSession = sessionStorage.getItem('walletInstance');
     if (walletFromSession) {
       try {
         const { auth } = this.props;
-        auth.setPrivateKey(JSON.parse(walletFromSession).privateKey);
-        auth.login();
+        auth.login(JSON.parse(walletFromSession).privateKey);
       } catch (e) {
         sessionStorage.removeItem('walletInstance');
       }
@@ -21,10 +23,17 @@ class App extends Component {
   render() {
     const { auth } = this.props;
     return (
-      <div className="App">
-        {auth.values.isLoggedIn ? <LogoutBtn/> : <Login/>}
+      <div>
+        <div className="App">
+          {
+            auth.values.isLoggedIn ? <div>
+              <Header/>
+              <RenderingPage/>
+            </div> : <Login/>
+          }
+        </div>
       </div>
-    )
+    );
   }
 }
 

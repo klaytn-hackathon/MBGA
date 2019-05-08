@@ -12,5 +12,4 @@ export const config = {
 };
 
 export const cav = new Caver(config.rpcURL);
-console.log(cav);
 export default cav;
