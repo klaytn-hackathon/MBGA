@@ -32,6 +32,7 @@
     "mobx-react": "^5.4.3",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
+    "react-infinite-scroll-component": "^4.5.2",
     "react-router": "^3.2.1"
   },
   "devDependencies": {

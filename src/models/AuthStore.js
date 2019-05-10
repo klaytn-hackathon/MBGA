@@ -38,14 +38,15 @@ export default class AuthStore {
       this.values.address = walletInstance.address;
       this.values.isLoggedIn = true;
       this.values.page = 0;
-    }).catch((e) => {
-      console.log(e);
+    }).catch((err) => {
+      console.log(err);
+      this.errors = err;
       action((err) => {
-        this.errors = err;
         throw err;
       })
     }).finally(() => {
-      action(() => { this.inProgress = false; })
+      this.inProgress = false;
+      action(() => {})
     });
   }
 
