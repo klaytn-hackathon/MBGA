@@ -55,7 +55,7 @@ const GASLIMIT = '20000000';
  * parameters for DEPLOY METHOD 1(By private key)
  */
 const URL = 'https://api.baobab.klaytn.net:8651';
-const PRIVATE_KEY = '0x48f5a77dbf13b436ae0325ae91efd084430d2da1123a8c273d7df5009248f90c';
+const PRIVATE_KEY = '';
 
 /**
  * parameters for DEPLOY METHOD 2(By unlocked account)

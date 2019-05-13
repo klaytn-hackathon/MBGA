@@ -8,7 +8,7 @@ contract DodoRepository {
     address[] public refereeEntry;
     mapping(uint => Proof[]) proofs; // key by project index.
     mapping(uint => Proof) claims;
-    uint period = 2 days;
+    uint period = 2 minutes;
     uint nonce = 0;
 
     struct ProjectInfo {
@@ -102,12 +102,16 @@ contract DodoRepository {
         require(now >= info.endTime + period * (status.claimed + 1),
             "This transaction must be fired after claim date finished!");
         status.judged = true;
+        status.success = status.success 
+            && (proofs[_index].length * 10 >= (info.endTime - info.startTime) * 8 / 1 minutes);
+        status.active = false;
+        statuses[_index] = status;
+        infos[_index] = info;
         if (status.success) {
             info.participant.transfer(info.freezeAmount);
         } else {
             owner.transfer(info.freezeAmount);
         }
-        status.active = false;
         return true;
     }
 
@@ -221,12 +225,12 @@ contract DodoRepository {
     * @param _index Index of the Project 
     * @return Project represents the Project
     */
-    function getProjectInfo(uint _index) public view returns (string,
-                                                        string,
-                                                        address,
-                                                        uint,
-                                                        uint,
-                                                        uint) {
+    function getProjectInfo(uint _index) public view returns (string name,
+                                                        string description,
+                                                        address participant,
+                                                        uint startTime,
+                                                        uint endTime,
+                                                        uint freeAmount) {
         ProjectInfo memory project = infos[_index];
         return (
             project.name, project.description, project.participant,
@@ -239,10 +243,10 @@ contract DodoRepository {
     * @param _index Index of the Project 
     * @return Project represents the Project
     */
-    function getProjectStatus(uint _index) public view returns (bool, //활성화 상태
-                                                        bool, //심사 상태
-                                                        bool, //성공 상태
-                                                        uint8) {
+    function getProjectStatus(uint _index) public view returns (bool active, //활성화 상태
+                                                        bool judged, //심사 상태
+                                                        bool success, //성공 상태
+                                                        uint8 claimed) {
         ProjectStatus memory project = statuses[_index];
         return (project.active, project.judged, project.success, project.claimed);
     }
@@ -292,6 +296,48 @@ contract DodoRepository {
         return 0;
     }
 
+    /**
+    * @dev Get Proof Count
+    * @param _index index of 0..<number of my Projects
+    * @return uint represents the count of my Projects Proof
+    */
+    function getProofsCount(uint _index) public view returns (uint) {
+        return proofs[_index].length;
+    }
+
+    /**
+    * @dev Get Proof
+    * @param _projectIdx index of project 
+    * @param _proofIdx index of 0..<number of getProofsCount
+    * @return proof information
+    */
+    function getProof(uint _projectIdx, uint _proofIdx) public view returns (string name,
+                                                                            string description,
+                                                                            uint timestamp) {
+        return (
+            proofs[_projectIdx][_proofIdx].name,
+            proofs[_projectIdx][_proofIdx].description,
+            proofs[_projectIdx][_proofIdx].timestamp
+        );
+    }
+
+    /**
+    * @dev Get Claim
+    * @param _index project index  
+    * @return claim information
+    */
+    function getClaim(uint _index) public view returns (string name,
+                                                        string description,
+                                                        uint timestamp,
+                                                        bool judged) {
+        return (
+            claims[_index].name,
+            claims[_index].description,
+            claims[_index].timestamp,
+            claims[_index].judged
+        );
+    }
+
     function random() internal returns (uint) {
         uint randomnumber = uint(keccak256(abi.encodePacked(now, msg.sender, nonce))) % infos.length;
         nonce++;
@@ -327,9 +373,9 @@ contract DodoRepository {
         ProjectReferees memory newProject;
         uint randNum = random();
         newProject.referee1 = refereeEntry[randNum];
-        randNum = (randNum + 1) % infos.length;
+        randNum = (randNum + 1) % refereeEntry.length;
         newProject.referee2 = refereeEntry[randNum];
-        randNum = (randNum + 1) % infos.length;
+        randNum = (randNum + 1) % refereeEntry.length;
         newProject.referee3 = refereeEntry[randNum];
         referees.push(newProject);
         return true;
