@@ -7,6 +7,7 @@ import App from './App';
 import AuthStore from './models/AuthStore';
 
 const authStore = new AuthStore();
+
 // Render App(root component).
 ReactDOM.render(
   <Provider 

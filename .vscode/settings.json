@@ -9,5 +9,6 @@
         "state-visibility": false,
         "var-name-mixedcase": "warn",
         "func-param-name-mixedcase": "warn"
-    }
+    },
+    "eslint.enable": false
 }

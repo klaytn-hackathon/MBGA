@@ -17,6 +17,8 @@ export default class AuthStore {
     this.values.privateKey = '';
     this.values.address = '';
     this.values.isLoggedIn = false;
+    this.errors = void 0;
+    this.inProgress = false;
     cav.klay.accounts.wallet.clear();
     sessionStorage.removeItem('walletInstance');
     return Promise.resolve();
@@ -38,6 +40,7 @@ export default class AuthStore {
       this.values.address = walletInstance.address;
       this.values.isLoggedIn = true;
       this.values.page = "1";
+      this.errors = void 0;
     }).catch((err) => {
       console.log(err);
       this.errors = err;

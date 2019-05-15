@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Layout } from 'antd';
 import Header from './components/Header';
-import LoginPage from './pages/LoginPage';
 import RenderingPage from './pages/RenderingPage';
 import "antd/dist/antd.css";
 
@@ -22,15 +21,12 @@ class App extends Component {
   }
 
   render() {
-    const { Content, Footer } = Layout;
-    const { auth } = this.props;
+    const { Content } = Layout;
     return (
       <Layout className="layout">
-        <Header/>
+        <Header />
         <Content style={{ padding: '0 50px' }}>
-          {
-            auth.values.isLoggedIn ? <RenderingPage/> : <LoginPage/>
-          }
+          <RenderingPage />
         </Content>
       </Layout>
     );

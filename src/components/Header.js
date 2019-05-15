@@ -4,6 +4,13 @@ import { Layout, Menu } from 'antd';
 import LogoutBtn from './LogoutBtn';
 import logo from '../static/logo.png';
 
+const styles = {
+  openTab: {
+    color: "#ffffff", 
+    fontWeight: "bold",
+  }
+};
+
 @inject('auth')
 @observer
 class Header extends Component {
@@ -21,13 +28,23 @@ class Header extends Component {
             <Menu
               theme="dark"
               mode="horizontal"
-              defaultSelectedKeys={[page]}
+              selectedKeys={[]}
               style={{ lineHeight: '64px', fontColor: "#ffffff", backgroundColor: "#2f54eb" }}
               onClick={this.handleChange}
             >
-              <Menu.Item key="1">home</Menu.Item>
-              <Menu.Item key="2">judge</Menu.Item>
-              <Menu.Item key="3">explore</Menu.Item>
+              <Menu.Item key="1">
+                home
+              </Menu.Item>
+              <Menu.Item key="2">
+                {
+                  page === "2" ? <div style={styles.openTab}>judge</div> : "judge"
+                }
+              </Menu.Item>
+              <Menu.Item key="3">
+                {
+                  page === "3" ? <div style={styles.openTab}>explore</div> : "explore"
+                }
+              </Menu.Item>
             </Menu>
           </div>
           <div style={{float: "right"}}>
