@@ -9,7 +9,7 @@ export default class AuthStore {
     privateKey: '',
     address: '',
     isLoggedIn: !!sessionStorage.getItem('walletInstance'),
-    page: 0,
+    page: "1",
   };
 
   @action 
@@ -37,7 +37,7 @@ export default class AuthStore {
       sessionStorage.setItem('walletInstance', JSON.stringify(walletInstance));
       this.values.address = walletInstance.address;
       this.values.isLoggedIn = true;
-      this.values.page = 0;
+      this.values.page = "1";
     }).catch((err) => {
       console.log(err);
       this.errors = err;

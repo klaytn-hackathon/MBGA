@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Button } from '@material-ui/core';
-//import { } from '@material-ui/icons';
+import { Button } from 'antd';
 
 @inject('auth')
 @observer
@@ -14,9 +13,12 @@ class LogoutBtn extends Component {
     return (
       <div className="Logout">
         <Button
+          shape="round"
           onClick={this.onLogoutBtnClick}
+          size="small"
+          ghost
         >
-          Log Out
+          logout
         </Button>
         
       </div>

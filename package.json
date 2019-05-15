@@ -20,8 +20,7 @@
   "author": "currybab",
   "license": "GPL-3.0",
   "dependencies": {
-    "@material-ui/core": "^3.9.3",
-    "@material-ui/icons": "^3.0.2",
+    "antd": "^3.18.1",
     "axios": "^0.18.0",
     "caver-js": "0.0.2-r",
     "classnames": "^2.2.5",

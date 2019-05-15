@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Button, TextField } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-//import { } from '@material-ui/icons';
+import { Button, Input } from 'antd';
 
 const styles = {
   loginForm: {
@@ -69,11 +64,9 @@ class LoginForm extends Component {
     const { errors } = this.props.auth;
     return (
       <div className="LoginForm" style={styles.loginForm}>
-        <TextField 
+        <Input 
           id="outlined-uncontrolled"
-          label="Login with Private Key"
           placeholder="0x2c4078447..."
-          multiline
           name="privateKey"
           type={this.state.showPassword ? 'text' : 'password'}
           value={this.state.privateKey}
@@ -81,18 +74,6 @@ class LoginForm extends Component {
           variant="outlined"
           onChange={this.handleChange('privateKey')}
           style={styles.privateKeyField}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="Toggle password visibility"
-                  onClick={this.handleClickShowPassword}
-                >
-                  {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
         />
         <Button
           onClick={this.onLoginBtnClick}

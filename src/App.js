@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+import { Layout } from 'antd';
+import Header from './components/Header';
 import LoginPage from './pages/LoginPage';
 import RenderingPage from './pages/RenderingPage';
-import Header from './components/Header';
+import "antd/dist/antd.css";
 
 @inject('auth')
 @observer
@@ -20,16 +22,17 @@ class App extends Component {
   }
 
   render() {
+    const { Content, Footer } = Layout;
     const { auth } = this.props;
     return (
-      <div className="App">
-        {
-          auth.values.isLoggedIn ? <div>
-            <Header/>
-            <RenderingPage/>
-          </div> : <LoginPage/>
-        }
-      </div>
+      <Layout className="layout">
+        <Header/>
+        <Content style={{ padding: '0 50px' }}>
+          {
+            auth.values.isLoggedIn ? <RenderingPage/> : <LoginPage/>
+          }
+        </Content>
+      </Layout>
     );
   }
 }

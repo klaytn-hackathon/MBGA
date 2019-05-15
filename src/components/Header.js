@@ -1,14 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import AppBar from '@material-ui/core/AppBar';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Hidden from '@material-ui/core/Hidden';
-import Toolbar from '@material-ui/core/Toolbar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Search from '@material-ui/icons/Search';
+import { Layout, Menu } from 'antd';
 import LogoutBtn from './LogoutBtn';
 import logo from '../static/logo.png';
 
@@ -16,45 +8,32 @@ import logo from '../static/logo.png';
 @observer
 class Header extends Component {
 
-  handleChange = (event, value) => {
-    this.props.auth.openPage(value);
+  handleChange = e => {
+    this.props.auth.openPage(e.key);
   };
 
   render() {
+    const { Header } = Layout;
     const { page } = this.props.auth.values;
     return (
-      <div className="Header">
-        <AppBar position="sticky" color="default" elevation={1}>
-          <Toolbar>
-            <img alt="logo" src={logo} className="poc-logo" height="30 px" style={{ margin: "0px 20px 0px 0px" }}/>
-            <Grid container alignItems="center">
-              <Grid item xs={9}>
-                <Tabs value={page} onChange={this.handleChange} variant="scrollable" indicatorColor="primary">
-                  <Tab value={0} label="home" />
-                  <Tab value={1} label="explore" />
-                  <Tab value={2} label="judge" />
-                  <Tab value={3} label="other.." />
-                </Tabs>
-              </Grid>
-              <Hidden xsDown >
-                <Grid item xs={3}>
-                  <TextField
-                    variant="outlined"
-                    placeholder="Search"
-                  />
-                </Grid>
-              </Hidden>
-            </Grid>
-
-            <div style={{ margin:"0px 8px",  width:"75px" }}>
-                wallet
-            </div>
-            <div style={{ margin:"0px 8px", width:"120px" }}>
-              <LogoutBtn />
-            </div>
-          </Toolbar>
-        </AppBar>
-      </div>
+      <Header style={{backgroundColor: "#2f54eb"}}>
+          <div style={{float: "left"}}>
+            <Menu
+              theme="dark"
+              mode="horizontal"
+              defaultSelectedKeys={[page]}
+              style={{ lineHeight: '64px', fontColor: "#ffffff", backgroundColor: "#2f54eb" }}
+              onClick={this.handleChange}
+            >
+              <Menu.Item key="1">home</Menu.Item>
+              <Menu.Item key="2">judge</Menu.Item>
+              <Menu.Item key="3">explore</Menu.Item>
+            </Menu>
+          </div>
+          <div style={{float: "right"}}>
+            <LogoutBtn />
+          </div>
+      </Header>
     );
   };
 };
