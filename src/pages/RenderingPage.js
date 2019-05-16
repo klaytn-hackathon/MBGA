@@ -6,7 +6,7 @@ import ExplorePage from "./ExplorePage";
 @observer
 class RenderingPage extends Component {
   render() {
-    const { page } = this.props.auth.values;
+    const { page, isLoggedIn } = this.props.auth.values;
     if(page == "1") {
       return (
         <ExplorePage />

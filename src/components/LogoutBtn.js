@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Button, Modal, Input } from 'antd';
 
-import LoginPage from '../pages/LoginPage';
-
 @inject('auth')
 @observer
 class LogoutBtn extends Component {
@@ -35,7 +33,6 @@ class LogoutBtn extends Component {
   };
 
   handleCancel = e => {
-    console.log(e);
     this.setState({
       visible: false,
     });
@@ -63,10 +60,12 @@ class LogoutBtn extends Component {
           }
         </Button>
         <Modal
-          title="Login"
+          title="Login with Private Key"
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
+          okText="Sign In"
+          cancelText="Close"
         >
           <Input 
             id="outlined-uncontrolled"
