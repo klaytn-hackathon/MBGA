@@ -23,9 +23,9 @@ class App extends Component {
   render() {
     const { Content } = Layout;
     return (
-      <Layout className="layout">
+      <Layout className="layout" >
         <Header />
-        <Content style={{ padding: '0 50px' }}>
+        <Content style={{ padding: '0', overflow: 'auto', height: "calc(100vh - 64px)" }} >
           <RenderingPage />
         </Content>
       </Layout>

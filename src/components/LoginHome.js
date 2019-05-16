@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import { observer, inject } from 'mobx-react';
 import { Button, Modal, Input } from 'antd';
 
 @inject('auth', 'contract')
 @observer
-class LogoutBtn extends Component {
+class LoginHome extends Component {
   state = { visible: false, privateKey: "", showPassword: true };
 
-  onLogoutBtnClick = () => {
+  clickStart = () => {
     const { isLoggedIn } = this.props.auth.values;
     if(isLoggedIn) {
-      this.props.auth.reset();
-      this.props.contract.resetMine();
+      // this.props.auth.reset();
+      // this.props.contract.resetMine();
     } else {
       this.showModal();
     }
@@ -49,17 +49,22 @@ class LogoutBtn extends Component {
     const { errors, values } = this.props.auth;
     const { isLoggedIn } = values;
     return (
-      <div className="Logout">
-        <Button
-          shape="round"
-          onClick={this.onLogoutBtnClick}
-          size="small"
-          ghost
-        >
-          { 
-            isLoggedIn ? "sign out" : "sign in"
-          }
-        </Button>
+      <div style={{backgroundColor: "#2f54eb", height: "620px", justifyContent: "center" }}>
+        <div style={{ justifyContent: "center", alignItems: "center", display: "block", textAlign: "center", paddingTop: "300px"}}>
+          <h2 style={{color: "#ffffff", fontWeight: "lighter"}}>
+            당신의 삶을 다시 한번 Build-up 해보세요.
+          </h2>
+          <Button 
+            shape="round" 
+            onClick={this.clickStart} 
+            style={{ 
+              maxWidth: "412px", minWidth: "300px", width: "90%", color: "#2f54eb", 
+              fontSize: "16px", marginTop: "90px", height: "48px" 
+            }}
+          >
+            시작하기
+          </Button>
+        </div>
         <Modal
           title="Login with Private Key"
           visible={this.state.visible}
@@ -68,7 +73,7 @@ class LogoutBtn extends Component {
           okText="Sign In"
           cancelText="Close"
         >
-          <Input.Password 
+          <Input 
             id="outlined-uncontrolled"
             placeholder="0x2c4078447..."
             name="privateKey"
@@ -88,4 +93,4 @@ class LogoutBtn extends Component {
   }
 }
 
-export default LogoutBtn;
+export default LoginHome;

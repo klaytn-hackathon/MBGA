@@ -5,13 +5,16 @@ import { Provider } from 'mobx-react';
 import App from './App';
 // import renderRoutes from './routes';
 import AuthStore from './models/AuthStore';
+import ContractStore from './models/ContractStore';
 
 const authStore = new AuthStore();
+const contractStore = new ContractStore();
 
 // Render App(root component).
 ReactDOM.render(
   <Provider 
     auth={authStore}
+    contract={contractStore}
   >
     <App/>
   </Provider>,

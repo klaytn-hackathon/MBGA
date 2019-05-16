@@ -1,5 +1,7 @@
 import React from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
+import InfiniteScroll from 'react-infinite-scroller';
+import { Card, Button } from 'antd';
+import NoLoginHome from '../components/NoLoginHome';
 
 const style = {
   height: 30,
@@ -10,7 +12,7 @@ const style = {
 
 class ExplorePage extends React.Component {
   state = {
-    items: Array.from({ length: 20 })
+    items: Array.from({ length: 12 })
   };
 
   fetchMoreData = () => {
@@ -18,45 +20,63 @@ class ExplorePage extends React.Component {
     // 20 more records in 1.5 secs
     setTimeout(() => {
       this.setState({
-        items: this.state.items.concat(Array.from({ length: 20 }))
+        items: this.state.items.concat(Array.from({ length: 12 }))
       });
+      window.addEventListener("scroll", this.infiniteScroll, true);
     }, 1500);
   };
 
   refresh = () => {
     setTimeout(() => {
       this.setState({
-        items: Array.from({ length: 20 }),
+        items: Array.from({ length: 12 }),
       });
     }, 1500);
-  };
+  };  
+
+  infiniteScroll = async () => {
+    const scrollHeight = document.querySelector("main").scrollHeight
+    const scrollTop = document.querySelector("main").scrollTop;
+    const clientHeight = document.querySelector("main").clientHeight;
+
+    if(scrollTop + clientHeight === scrollHeight) {
+      window.removeEventListener("scroll", this.infiniteScroll, true);
+      this.fetchMoreData();
+    }
+  }
+
+  componentDidMount() {
+    window.addEventListener("scroll", this.infiniteScroll, true);
+  }
 
   render() {
+    const { Meta } = Card;
     return (
-      <div>
-        <h1>demo: react-infinite-scroll-component</h1>
-        <hr />
-        <InfiniteScroll
-          dataLength={this.state.items.length}
-          next={this.fetchMoreData}
-          hasMore={true}
-          loader={<h4>Loading...</h4>}
-          refreshFunction={this.refresh}
-          pullDownToRefresh
-          pullDownToRefreshContent={
-            <h3 style={{textAlign: 'center'}}>&#8595; Pull down to refresh</h3>
-          }
-          releaseToRefreshContent={
-            <h3 style={{textAlign: 'center'}}>&#8593; Release to refresh</h3>
-          }
-        >
-          {this.state.items.map((i, index) => (
-            <div style={style} key={index}>
-              div - #{index}
-            </div>
-          ))}
-        </InfiniteScroll>
-      </div>
+      
+        <div>
+          <NoLoginHome />
+          <h2 style={{ textAlign: "center", marginTop: "100px"}}>다른 사람의 Life</h2>
+            <div
+              className="ExplorePage-InfiniteScroll"
+              style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "10px auto", width: "70%", justifyContent: "space-between", listStyle: "none", flexFlow: "row wrap", padding: "0" }}
+            >
+            {
+              this.state.items.map((i, index) => (
+                <Card
+                    style={{ width: "360px", height: "360px", margin: "30px auto" }}
+                  >
+                    <Meta
+                      title={`${index}Cdfdfdfdfdfdfdfdfdfdfdfdfdfdf`}
+                    />
+                    <br/> 
+                    <Button style={{ height: "90px", fontSize: "30px", position: "absolute", top: "240px", left: "30px", width: "300px" }}>
+                      내역 보기
+                    </Button>
+                  </Card>
+              ))
+            }
+          </div>
+        </div>
     );
   }
 }
