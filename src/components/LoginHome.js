@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { observer, inject } from 'mobx-react';
 import { Button, Modal, Input } from 'antd';
+import NoLoginHome from './NoLoginHome';
 
 @inject('auth', 'contract')
 @observer
 class LoginHome extends Component {
-  state = { visible: false, privateKey: "", showPassword: true };
+  state = { loading: false, contractCount: 0, items: [1,2] };
 
   clickStart = () => {
     const { isLoggedIn } = this.props.auth.values;
@@ -17,77 +18,36 @@ class LoginHome extends Component {
     }
   }
 
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
-  };
+  componentDidMount() {
 
-  handleOk = async e => {
-    console.log(e);
-    await this.props.auth.login(this.state.privateKey);
-    if(this.props.auth.errors === void 0) {
-      this.setState({
-        visible: false,
-      });
-    }
-  };
-
-  handleCancel = e => {
-    this.setState({
-      visible: false,
-    });
-  };
-
-  handleChange = name => event => {
-    this.setState({
-      [name]: event.target.value,
-    });
-  };
+  }
 
   render() {
     const { errors, values } = this.props.auth;
-    const { isLoggedIn } = values;
+    console.log(this.state.items);
+    if(this.state.loading) {
+      return <div style={{textAlign: "center"}}>Loading...</div>
+    }
+    // if(this.state.contractCount === 0) {
+    //   return <NoLoginHome />;
+    // }
     return (
-      <div style={{backgroundColor: "#2f54eb", height: "620px", justifyContent: "center" }}>
-        <div style={{ justifyContent: "center", alignItems: "center", display: "block", textAlign: "center", paddingTop: "300px"}}>
-          <h2 style={{color: "#ffffff", fontWeight: "lighter"}}>
-            당신의 삶을 다시 한번 Build-up 해보세요.
-          </h2>
-          <Button 
-            shape="round" 
-            onClick={this.clickStart} 
-            style={{ 
-              maxWidth: "412px", minWidth: "300px", width: "90%", color: "#2f54eb", 
-              fontSize: "16px", marginTop: "90px", height: "48px" 
-            }}
-          >
-            시작하기
-          </Button>
+      <div style={{ justifyContent: "center",  display: "block" }}>
+        <div style={{ justifyContent: "center", alignItems: "center", height: "170px", display: "flex" }}>
+          <div style={{ textAlign: "center", fontSize: "30px", fontWeight: "lighter"}}>MyLife</div>
         </div>
-        <Modal
-          title="Login with Private Key"
-          visible={this.state.visible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-          okText="Sign In"
-          cancelText="Close"
-        >
-          <Input 
-            id="outlined-uncontrolled"
-            placeholder="0x2c4078447..."
-            name="privateKey"
-            type={this.state.showPassword ? 'text' : 'password'}
-            value={this.state.privateKey}
-            margin="normal"
-            variant="outlined"
-            onChange={this.handleChange('privateKey')}
-          />
-          {
-            errors != void 0 ?  
-              <div style={{color: "red"}}>{errors.message}</div> : ""
-          }
-        </Modal>
+        {
+          this.state.items.map((i, index) => {
+            return (
+              <div style={{ height: "232px", borderTop: "1px solid #979797", borderBottom: "1px solid #979797", marginBottom: "22px"}}>
+              blablabla
+              </div>
+            );
+          })
+        }
+        <div style={{ justifyContent: "center", alignItems: "center", textAlign: "center", marginTop: "20px", fontSize: "30px", fontWeight: "lighter", textDecoration: "underline"}}>
+          새로운 도전하기
+        </div>
       </div>
     );
   }

@@ -1,15 +1,11 @@
 import React from "react";
-import InfiniteScroll from 'react-infinite-scroller';
+import { observer, inject } from 'mobx-react';
 import { Card, Button } from 'antd';
 import NoLoginHome from '../components/NoLoginHome';
+import LoginHome from '../components/LoginHome';
 
-const style = {
-  height: 30,
-  border: "1px solid green",
-  margin: 6,
-  padding: 8
-};
-
+@inject('auth')
+@observer
 class ExplorePage extends React.Component {
   state = {
     items: Array.from({ length: 12 })
@@ -51,10 +47,13 @@ class ExplorePage extends React.Component {
 
   render() {
     const { Meta } = Card;
+    const { isLoggedIn } = this.props.auth.values;
     return (
       
         <div>
-          <NoLoginHome />
+          {
+            isLoggedIn ? <LoginHome /> : <NoLoginHome />
+          }
           <h2 style={{ textAlign: "center", marginTop: "100px"}}>다른 사람의 Life</h2>
             <div
               className="ExplorePage-InfiniteScroll"

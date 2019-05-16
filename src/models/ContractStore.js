@@ -2,31 +2,36 @@ import { observable, action } from 'mobx';
 import { cav } from 'klaytn/caver';
 
 export default class ContractStore {
-  @observable myProjects = [];
-  @observable myProjectCount = 0;
-  @observable allProjects = [];
-  @observable allProjectCount = 0;
-  @observable myJudges = [];
-  @observable myJudgeCount = 0;
-  @observable allProofs = [];
-  @observable allProofCount = 0;
+  @observable projectName = "";
+  @observable startTime = 0;
+  @observable endTime = 0;
+  @observable betAmount = 0;
 
   @action 
-  resetMine() {
-    this.myProjects = [];
-    this.myProjectCount = 0;
-    this.myJudges = [];
-    this.myJudgeCount = 0;
+  reset() {
+    this.projectName = "";
+    this.startTime = 0;
+    this.endTime = 0;
+    this.betAmount = 0;
     return Promise.resolve();
   }
 
   @action
-  loadMyProject() {
-
+  setProjectName(name) {
+    this.projectName = name;
+    return Promise.resolve();
   }
 
   @action
-  loadAllProject() {
+  setPeriod(start, end) {
+    this.startTime = start;
+    this.endTime = end;
+    return Promise.resolve();
+  }
 
+  @action
+  setBetAmount(klay) {
+    this.betAmount = klay;
+    return Promise.resolve();
   }
 };
