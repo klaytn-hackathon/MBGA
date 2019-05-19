@@ -6,7 +6,7 @@ contract DodoRepository {
     ProjectStatus[] public statuses;
     ProjectReferees[] public referees;
     address[] public refereeEntry;
-    mapping(uint => Proof[]) proofs; // key by project index.
+    Proof[] public proofs; // key by project index.
     mapping(uint => Proof) claims;
     uint period = 2 minutes;
     uint nonce = 0;

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { observer, inject } from 'mobx-react';
-import { Button, Modal, Input } from 'antd';
+import { Button, Modal, Input, Row, Col } from 'antd';
 import NoLoginHome from './NoLoginHome';
 
 @inject('auth', 'contract')
@@ -40,7 +40,25 @@ class LoginHome extends Component {
           this.state.items.map((i, index) => {
             return (
               <div style={{ height: "232px", borderTop: "1px solid #979797", borderBottom: "1px solid #979797", marginBottom: "22px"}}>
-              blablabla
+                <Row type="flex" align="center" justify="center" style={{ height: "100%" }}>
+                  <Col span={12} style={{ maxWidth: "1400px", minWidth: "375px", alignItems: "center", display: "flex" }}>
+                    <div style={{ float: "left", alignItems: "center" }}>
+                      <div style={{ fontSize: "30px", fontWeight: "lighter", color: "#343434"}}> 
+                        매일 하루에 한번씩 운동하기
+                      </div>
+                      <div style={{ fontSize: "18px", fontWeight: "lighter", color: "#979797", marginTop: "42px"}}>
+                        남은 도전 기간 35:24:12
+                      </div>
+                    </div>
+                  </Col>
+                  <Col span={6} style={{alignItems: "center", display: "flex", justifyContent: "flex-end"}}>
+                    <div style={{ fontSize: "30px", fontWeight: "lighter", color: "#343434" }}>
+                      <div style={{ marginRight: "15px"}}>
+                        인증완료
+                      </div>
+                    </div>  
+                  </Col>
+                </Row>
               </div>
             );
           })

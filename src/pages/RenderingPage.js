@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import ExplorePage from "./ExplorePage";
+import NotJudgePage from "./NotJudgePage";
 
 @inject('auth')
 @observer
@@ -15,7 +16,7 @@ class RenderingPage extends Component {
 
     if(page == "2") {
       return (
-        <h1>judge</h1>
+        <NotJudgePage />
       );
     }
 
