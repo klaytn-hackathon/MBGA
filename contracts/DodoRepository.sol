@@ -26,9 +26,7 @@ contract DodoRepository {
 
     struct ProjectStatus {
         bool active; //활성화 상태
-        bool judged; //심사 상태
         bool success; //성공 상태
-        uint8 claimed;
     }
 
     struct ProjectReferees {
@@ -40,9 +38,9 @@ contract DodoRepository {
     struct Proof {
         string name;
         string memo;
-        uint prjectNo;
+        uint projectNo;
         uint timestamp;
-        uint8 judged; // 1,2,4   8,16,32   24이상은 트루 (배심원의 2/3 이상 찬성)
+        uint8 judged; // 0: 클레임, 1: 심사필요, 2,4,8   16,32,64   48이상은 트루 (배심원의 2/3 이상 찬성), 128 클레임 후 찬성
         address[] like;
         address[] dislike;
     }
@@ -94,7 +92,6 @@ contract DodoRepository {
         assert(createInfo(_name, _description, _startDate, _endDate)
             && createStatus()
             && createReferees());
-
         return true;
     }
 
@@ -123,22 +120,8 @@ contract DodoRepository {
     }
 
     /**
-    * @dev Judge Project
-    * @param _index Index of the Project 
-    * @param _result judgement result by referee(msg.sender)
-    * @return bool result of transaction
-    */
-    function judgeProject(uint _index, bool _result) public onlyReferee(_index) returns (bool) {
-        ProjectStatus memory status = statuses[_index];
-        status.judged = true;
-        status.success = _result;
-        statuses[_index] = status;
-        return true;
-    }
-
-    /**
     * @dev Submit Proof
-    * @param _index Index of the Project 
+    * @param _index Index of the Proof 
     * @param name name of the proof
     * @param description description of the proof
     * @return bool result of transaction
@@ -149,7 +132,8 @@ contract DodoRepository {
         newProof.memo = memo;
         newProof.timestamp = now;
         newProof.judged = 0;
-        proofs[_index].push(newProof);
+        newProof.projectNo = _index;
+        proofs.push(newProof);
 
         return true;
     }
@@ -161,12 +145,12 @@ contract DodoRepository {
     * @param description description of the proof 
     * @return bool result of transaction
     */
-    function claimJudge(uint _index, string name, string description) public onlyProjectOwner(_index) returns (bool) {
+    function claimJudge(uint _index, string name, string memo) public onlyProjectOwner(_index) returns (bool) {
         Proof memory newProof;
         newProof.name = name;
-        newProof.description = description;
+        newProof.memo = memo;
         newProof.timestamp = now;
-        newProof.judged = false;
+        newProof.judged = 1;
         claims[_index] = newProof;
 
         return true;
@@ -215,8 +199,12 @@ contract DodoRepository {
     * @dev Get Referee List
     * @return address represents the referee list of Projects
     */
-    function getwhiteList() public view returns (address[]) {
+    function getWhiteList() public view returns (address[]) {
         return whiteList;
+    }
+
+    function getBlackList() public view returns (address[]) {
+        return blackList;
     }
 
     /**
