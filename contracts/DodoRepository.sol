@@ -5,9 +5,13 @@ contract DodoRepository {
     ProjectInfo[] public infos;
     ProjectStatus[] public statuses;
     ProjectReferees[] public referees;
-    address[] public refereeEntry;
-    Proof[] public proofs; // key by project index.
-    mapping(uint => Proof) claims;
+
+    Proof[] public proofs; 
+    mapping(uint => uint[]) ppMap; // key: project index, value: proof indexes
+    mapping(uint => Proof) claims; // key: proof index, value: claim
+
+    address[] public whiteList;
+    address[] public blackList;
     uint period = 2 minutes;
     uint nonce = 0;
 
@@ -15,8 +19,8 @@ contract DodoRepository {
         string name;
         string description;
         address participant;
-        uint startTime;
-        uint endTime;
+        uint startDate;
+        uint endDate;
         uint freezeAmount;
     }
 
@@ -35,9 +39,12 @@ contract DodoRepository {
 
     struct Proof {
         string name;
-        string description;
+        string memo;
+        uint prjectNo;
         uint timestamp;
-        bool judged;
+        uint8 judged; // 1,2,4   8,16,32   24이상은 트루 (배심원의 2/3 이상 찬성)
+        address[] like;
+        address[] dislike;
     }
 
     modifier onlyOwner() {
@@ -65,7 +72,7 @@ contract DodoRepository {
     */
     constructor() public {
         owner = 0xbf128F013F40ec7Fdfe95d0A298E85764f628e7F;
-        refereeEntry.push(0xbf128F013F40ec7Fdfe95d0A298E85764f628e7F);
+        whiteList.push(0xbf128F013F40ec7Fdfe95d0A298E85764f628e7F);
     }
 
     function () external payable {
@@ -76,15 +83,15 @@ contract DodoRepository {
     * @dev Create Project
     * @param _name name of the Project
     * @param _description description of the Project
-    * @param _startTime start timestamp
-    * @param _endTime end timestamp
+    * @param _startDate start timestamp
+    * @param _endDate end timestamp
     * @return bool result of transaction
     */
     function createProject(string _name,
                             string _description,
-                            uint _startTime,
-                            uint _endTime) public payable returns (bool) {
-        assert(createInfo(_name, _description, _startTime, _endTime)
+                            uint _startDate,
+                            uint _endDate) public payable returns (bool) {
+        assert(createInfo(_name, _description, _startDate, _endDate)
             && createStatus()
             && createReferees());
 
@@ -99,11 +106,11 @@ contract DodoRepository {
     function finalizeProject(uint _index) public payable returns (bool) {
         ProjectInfo memory info = infos[_index];
         ProjectStatus memory status = statuses[_index];
-        require(now >= info.endTime + period * (status.claimed + 1),
+        require(now >= info.endDate + period * (status.claimed + 1),
             "This transaction must be fired after claim date finished!");
         status.judged = true;
         status.success = status.success 
-            && (proofs[_index].length * 10 >= (info.endTime - info.startTime) * 8 / 1 minutes);
+            && (ppMap[_index].length * 10 >= (info.endDate - info.startDate) * 8 / 1 minutes);
         status.active = false;
         statuses[_index] = status;
         infos[_index] = info;
@@ -136,12 +143,12 @@ contract DodoRepository {
     * @param description description of the proof
     * @return bool result of transaction
     */
-    function submitProof(uint _index, string name, string description) public onlyProjectOwner(_index) returns (bool) {
+    function submitProof(uint _index, string name, string memo) public onlyProjectOwner(_index) returns (bool) {
         Proof memory newProof;
         newProof.name = name;
-        newProof.description = description;
+        newProof.memo = memo;
         newProof.timestamp = now;
-        newProof.judged = true;
+        newProof.judged = 0;
         proofs[_index].push(newProof);
 
         return true;
@@ -183,7 +190,7 @@ contract DodoRepository {
     * @return bool result of transaction
     */
     function applyReferee() public returns (bool) {
-        refereeEntry.push(msg.sender);
+        whiteList.push(msg.sender);
         return true;
     }
 
@@ -192,15 +199,15 @@ contract DodoRepository {
     * @return bool result of transaction
     */
     function cancelReferee() public returns (bool) {
-        uint index = refereeEntry.length;
-        for (uint i = 0; i < refereeEntry.length; i++) {
-            if (refereeEntry[i] == msg.sender) {
+        uint index = whiteList.length;
+        for (uint i = 0; i < whiteList.length; i++) {
+            if (whiteList[i] == msg.sender) {
                 index = i;
                 break;
             }
         }
-        refereeEntry[index] = refereeEntry[refereeEntry.length - 1];
-        refereeEntry.length--;
+        whiteList[index] = whiteList[whiteList.length - 1];
+        whiteList.length--;
         return false;
     }
 
@@ -208,8 +215,8 @@ contract DodoRepository {
     * @dev Get Referee List
     * @return address represents the referee list of Projects
     */
-    function getRefereeEntry() public view returns (address[]) {
-        return refereeEntry;
+    function getwhiteList() public view returns (address[]) {
+        return whiteList;
     }
 
     /**
@@ -228,13 +235,13 @@ contract DodoRepository {
     function getProjectInfo(uint _index) public view returns (string name,
                                                         string description,
                                                         address participant,
-                                                        uint startTime,
-                                                        uint endTime,
+                                                        uint startDate,
+                                                        uint endDate,
                                                         uint freeAmount) {
         ProjectInfo memory project = infos[_index];
         return (
             project.name, project.description, project.participant,
-            project.startTime, project.endTime, project.freezeAmount
+            project.startDate, project.endDate, project.freezeAmount
         );
     }
 
@@ -346,13 +353,13 @@ contract DodoRepository {
 
     function createInfo(string _name,
                             string _description,
-                            uint _startTime,
-                            uint _endTime) internal returns (bool) {
+                            uint _startDate,
+                            uint _endDate) internal returns (bool) {
         ProjectInfo memory newProject;
         newProject.name = _name;
         newProject.description = _description;
-        newProject.startTime = _startTime;
-        newProject.endTime = _endTime;
+        newProject.startDate = _startDate;
+        newProject.endDate = _endDate;
         newProject.participant = msg.sender;
         newProject.freezeAmount = msg.value;
         infos.push(newProject);
@@ -372,11 +379,11 @@ contract DodoRepository {
     function createReferees() internal returns (bool) {
         ProjectReferees memory newProject;
         uint randNum = random();
-        newProject.referee1 = refereeEntry[randNum];
-        randNum = (randNum + 1) % refereeEntry.length;
-        newProject.referee2 = refereeEntry[randNum];
-        randNum = (randNum + 1) % refereeEntry.length;
-        newProject.referee3 = refereeEntry[randNum];
+        newProject.referee1 = whiteList[randNum];
+        randNum = (randNum + 1) % whiteList.length;
+        newProject.referee2 = whiteList[randNum];
+        randNum = (randNum + 1) % whiteList.length;
+        newProject.referee3 = whiteList[randNum];
         referees.push(newProject);
         return true;
     }
