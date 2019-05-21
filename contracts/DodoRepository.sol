@@ -5,6 +5,7 @@ contract DodoRepository {
     ProjectInfo[] public infos;
     ProjectStatus[] public statuses;
     ProjectReferees[] public referees;
+    mapping(address => uint[]) apMap; // key: participant address, value: project index
 
     Proof[] public proofs; 
     mapping(uint => uint[]) ppMap; // key: project index, value: proof indexes
@@ -14,7 +15,7 @@ contract DodoRepository {
 
     address[] public whiteList;
     address[] public blackList; // 아직 기능 구현 안할듯
-    uint period = 2 minutes;
+    uint period = 2 days;
     uint nonce = 0;
 
     struct ProjectInfo {
@@ -43,7 +44,7 @@ contract DodoRepository {
         string memo;
         uint projectNo;
         uint timestamp;
-        uint8 judged; // 0: 클레임, 1: 심사필요, 2,4,8   16,32,64   48이상은 트루 (배심원의 2/3 이상 찬성), 128 클레임 후 찬성, 129 클레임 실패
+        uint8 judged; // 1: 클레임, 0: 심사필요, 2,4,8   16,32,64   48이상은 트루 (배심원의 2/3 이상 찬성), 128 클레임 후 찬성, 129 클레임 실패
         address[] like;
         address[] dislike;
     }
@@ -69,7 +70,8 @@ contract DodoRepository {
     }
 
     modifier onlyProjectOwner2(uint _index) {
-        require(msg.sender == infos[proofs[_index].projectNo].participant, "This transaction must be called by project owner");
+        require(msg.sender == infos[proofs[_index].projectNo].participant, 
+            "This transaction must be called by project owner");
         _;
     }
 
@@ -100,6 +102,7 @@ contract DodoRepository {
         assert(createInfo(_name, _description, _startDate, _endDate)
             && createStatus()
             && createReferees());
+        apMap[msg.sender].push(infos.length - 1);
         return true;
     }
 
@@ -114,10 +117,10 @@ contract DodoRepository {
         require(now >= info.endDate + period * (status.claimed + 1),
             "This transaction must be fired after claim date finished!");
         uint successCount = 0;
-        for(uint i = 0; i < ppMap[_index].length; i++) {
-            if(calculateProof(ppMap[_index][i])) successCount += 1;
+        for (uint i = 0; i < ppMap[_index].length; i++) {
+            if (calculateProof(ppMap[_index][i])) successCount += 1;
         }
-        status.success = successCount * 10 >= (info.endDate - info.startDate) * 8 / 1 minutes;
+        status.success = successCount * 10 >= (info.endDate - info.startDate) * 8 / 1 days;
         status.active = false;
         statuses[_index] = status;
         if (status.success) {
@@ -140,7 +143,7 @@ contract DodoRepository {
         newProof.name = name;
         newProof.memo = memo;
         newProof.timestamp = now;
-        newProof.judged = 1;
+        newProof.judged = 0;
         newProof.projectNo = _index;
         proofs.push(newProof);
         ppMap[_index].push(proofs.length - 1);
@@ -163,9 +166,9 @@ contract DodoRepository {
         newProof.name = name;
         newProof.memo = memo;
         newProof.timestamp = now;
-        newProof.judged = 0;
+        newProof.judged = 1;
         claims[_index] = newProof;
-        proofs[_index].judged = 0;
+        proofs[_index].judged = 1;
         
         statuses[proofs[_index].projectNo].claimed += 1;
 
@@ -229,6 +232,14 @@ contract DodoRepository {
             }
         }
         proofs[_index].like.push(msg.sender);
+        if (msg.sender == referees[proofs[_index].projectNo].referee1) {
+            proofs[_index].judged += 16;
+        } else if (msg.sender == referees[proofs[_index].projectNo].referee2) {
+            proofs[_index].judged += 32;
+        } else if (msg.sender == referees[proofs[_index].projectNo].referee3) {
+            proofs[_index].judged += 64;
+        }
+
         return true;
     }
 
@@ -241,6 +252,13 @@ contract DodoRepository {
             }
         }
         proofs[_index].dislike.push(msg.sender);
+        if (msg.sender == referees[proofs[_index].projectNo].referee1) {
+            proofs[_index].judged += 2;
+        } else if (msg.sender == referees[proofs[_index].projectNo].referee2) {
+            proofs[_index].judged += 4;
+        } else if (msg.sender == referees[proofs[_index].projectNo].referee3) {
+            proofs[_index].judged += 8;
+        }
         return true;
     }
 
@@ -303,36 +321,20 @@ contract DodoRepository {
     }
 
     /**
-    * @dev Get My Project Counts
+    * @dev Get My Project List
     * @param _address address 
-    * @return uint represents the number of my Projects
+    * @return uint[] represents the number of my Projects
     */
-    function getMyProjectCounts(address _address) public view returns (uint) {
-        uint result = 0;
-        for (uint i = 0; i < infos.length; i++) {
-            if (infos[i].participant == _address) {
-                result++;
-            }
-        }
-        return result;
+    function getMyProjectList(address _address) public view returns (uint[] list) {
+        return apMap[_address];
     }
 
     /**
-    * @dev Get My Index
-    * @param _address address 
-    * @param _index index of 0..<number of my Projects
-    * @return uint represents the index of my Projects
+    * @dev Get All Proof Count
+    * @return uint represents the count of All Project Proofs
     */
-    function getMyProjectIndex(address _address, uint _index) public view returns (uint) {
-        for (uint i = 0; i < infos.length; i++) {
-            if (infos[i].participant == _address) {
-                if (_index == 0) {
-                    return i;
-                }
-                _index--;
-            }
-        }
-        return 0;
+    function getAllProofsCount() public view returns (uint) {
+        return proofs.length;
     }
 
     /**
@@ -367,9 +369,17 @@ contract DodoRepository {
         );
     }
 
+    function getProofList(uint _index) public view returns (uint[] list) {
+        return ppMap[_index];
+    }
+
+    function getJudgeList(address _address) public view returns (uint[] list) {
+        return rpMap[_address];
+    }
+
     /**
     * @dev Get Claim
-    * @param _index project index  
+    * @param _index proof index  
     * @return claim information
     */
     function getClaim(uint _index) public view returns (string name,
@@ -427,50 +437,50 @@ contract DodoRepository {
         return true;
     }
 
-    function calculateProof(uint _index) internal returns (bool) {
+    function calculateProof(uint _index) internal view returns (bool) {
         uint successCount = 0;
         uint failCount = 0;
 
-        if(proof.judged == 129) {
+        if (proof.judged == 129) {
             return false;
         }
 
-        if(proof.judged == 128) {
+        if (proof.judged == 128) {
             return true;
         }
 
         Proof memory proof = proofs[_index];
-        if(proof.judged / 64 == 1) {
+        if (proof.judged / 64 == 1) {
             proof.judged %= 64;
             successCount += 1;
         }
-        if(proof.judged / 32 == 1) {
+        if (proof.judged / 32 == 1) {
             proof.judged %= 32;
             successCount += 1;
         }
-        if(proof.judged / 16 == 1) {
+        if (proof.judged / 16 == 1) {
             proof.judged %= 16;
             successCount += 1;
         }
-        if(successCount >= 2) return true;
+        if (successCount >= 2) return true;
 
-        if(proof.judged / 8 == 1) {
+        if (proof.judged / 8 == 1) {
             proof.judged %= 8;
             failCount += 1;
         }
-        if(proof.judged / 4 == 1) {
+        if (proof.judged / 4 == 1) {
             proof.judged %= 4;
             failCount += 1;
         }
-        if(proof.judged / 2 == 1) {
+        if (proof.judged / 2 == 1) {
             proof.judged %= 2;
             failCount += 1;
         }
-        if(failCount >= 2) return false;
+        if (failCount >= 2) return false;
 
-        if(successCount > failCount) {
+        if (successCount > failCount) {
             return proof.like.length + 10 > proof.dislike.length;
-        } else if(failCount < successCount) {
+        } else if (failCount < successCount) {
             return proof.like.length > proof.dislike.length;
         } else {
             return proof.like.length + 5 > proof.dislike.length;
