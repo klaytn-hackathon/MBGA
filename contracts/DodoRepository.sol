@@ -81,6 +81,8 @@ contract DodoRepository {
     constructor() public {
         owner = 0xbf128F013F40ec7Fdfe95d0A298E85764f628e7F;
         whiteList.push(0xbf128F013F40ec7Fdfe95d0A298E85764f628e7F);
+        whiteList.push(0xd8598Fb4281457f6c3C0E66f1aae1f719d4F0432);
+        whiteList.push(0xE64829EBBffA77b5D1b668fbf7e4cFB36Ad33245);
     }
 
     function () external payable {
@@ -231,6 +233,12 @@ contract DodoRepository {
                 return false;
             }
         }
+        address[] memory arr2 = proofs[_index].dislike;
+        for (uint j = 0; j < arr2.length; i++) {
+            if (arr2[j] == msg.sender) {
+                return false;
+            }
+        }
         proofs[_index].like.push(msg.sender);
         if (msg.sender == referees[proofs[_index].projectNo].referee1) {
             proofs[_index].judged += 16;
@@ -248,6 +256,12 @@ contract DodoRepository {
         address[] memory arr = proofs[_index].dislike;
         for (uint i = 0; i < arr.length; i++) {
             if (arr[i] == msg.sender) {
+                return false;
+            }
+        }
+        address[] memory arr2 = proofs[_index].like;
+        for (uint j = 0; j < arr2.length; i++) {
+            if (arr2[j] == msg.sender) {
                 return false;
             }
         }
