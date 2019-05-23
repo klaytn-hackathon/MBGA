@@ -13,11 +13,39 @@ class LoginHome extends Component {
   loadCount = 0;
   state = { loading: true, items: [] };
 
+  async componentDidUpdate(prevProps) { 
+    if(this.props.auth.values.address !== prevProps.auth.values.address) {
+      try {
+        const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
+        console.log(this.props.auth.values.address)
+        const projectList = await contract.methods.getMyProjectList(this.props.auth.values.address).call();
+        const items = [];
+        for(let i = projectList.length - 1; i >= 0; i -= 1) {
+          const info = await contract.methods.getProjectInfo(projectList[i] * 1).call();
+          const status = await contract.methods.getProjectStatus(projectList[i] * 1).call();
+          items.push({ info, status, key: projectList[i] });
+          if(items.length >= 2) break;
+        }
+        this.setState({
+          loading: false,
+          items
+        });
+      } catch(e) {
+        this.setState({
+          loading: false,
+          items: [],
+        })
+      }
+    }
+  }
+
   async componentDidMount() {
+    const address = this.props.auth.values.address || JSON.parse(sessionStorage.getItem('walletInstance')).address;
+
     try {
       const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
-      console.log(this.props.auth.values.address)
-      const projectList = await contract.methods.getMyProjectList(this.props.auth.values.address).call();
+      console.log(address)
+      const projectList = await contract.methods.getMyProjectList(address).call();
       const items = [];
       for(let i = projectList.length - 1; i >= 0; i -= 1) {
         const info = await contract.methods.getProjectInfo(projectList[i] * 1).call();

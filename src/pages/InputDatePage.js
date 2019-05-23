@@ -51,7 +51,6 @@ class InputDatePage extends Component {
         from: this.props.auth.values.address, 
         value: cav.utils.toPeb(this.props.contract.betAmount),
       });
-      console.log(gasAmount);
     
       contract.methods.createProject(this.props.contract.projectName,
         "",

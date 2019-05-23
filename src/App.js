@@ -25,7 +25,7 @@ class App extends Component {
     return (
       <Layout className="layout" >
         <Header />
-        <Content style={{ padding: '0', overflow: 'auto', height: "calc(100vh - 64px)" }} >
+        <Content style={{ padding: '0', overflow: 'auto', height: "calc(100vh - 64px)", backgroundColor: "white" }} >
           <RenderingPage />
         </Content>
       </Layout>
