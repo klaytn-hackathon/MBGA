@@ -5,7 +5,7 @@ class NotJudgePage extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{backgroundColor: "#ffffff"}} >
         <div style={{backgroundColor: "#ffffff", height: "617px", borderBottom: "solid 1px #979797" }}>
           <div style={{ justifyContent: "center", alignItems: "center", display: "block", textAlign: "center", paddingTop: "200px"}}>
             <h2 style={{color: "#979797", fontSize: "30px", fontWeight: "lighter"}}>

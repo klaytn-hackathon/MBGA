@@ -3,6 +3,8 @@ import { observer, inject } from 'mobx-react';
 import { Card, Button } from 'antd';
 import NoLoginHome from '../components/NoLoginHome';
 import LoginHome from '../components/LoginHome';
+import cav from '../klaytn/caver';
+import contractJson from '../../build/contracts/DodoRepository.json';
 
 @inject('auth')
 @observer
@@ -42,6 +44,10 @@ class ExplorePage extends React.Component {
   }
 
   componentDidMount() {
+    
+    this.setState(
+
+    );
     window.addEventListener("scroll", this.infiniteScroll, true);
   }
 
@@ -50,7 +56,7 @@ class ExplorePage extends React.Component {
     const { isLoggedIn } = this.props.auth.values;
     return (
       
-        <div>
+        <div style={{backgroundColor: "#ffffff"}}>
           {
             isLoggedIn ? <LoginHome /> : <NoLoginHome />
           }

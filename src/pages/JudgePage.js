@@ -49,7 +49,7 @@ class JudgePage extends Component {
     const { isLoggedIn } = this.props.auth.values;
     return (
       
-        <div>
+        <div style={{backgroundColor: "#ffffff"}} >
           {
             isLoggedIn ? <LoginHome /> : <NoLoginHome />
           }
