@@ -252,7 +252,9 @@ class JudgePage extends Component {
             확인해야 할 인증
           </h2>
         </div>
-        <div>
+        <div
+          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "10px auto", width: "70%", justifyContent: "space-between", listStyle: "none", flexFlow: "row wrap", padding: "0" }}
+        >
           {
             this.state.judgeItems.map((item, index) => (
               <Card
