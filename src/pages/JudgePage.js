@@ -30,6 +30,7 @@ class JudgePage extends Component {
     const finishedLength = this.state.finishedItems.length;
     for (let i = this.itemList.length - 1 - judgeLength - finishedLength; i >= 0; i -= 1) {
       const item = await contract.methods.getProof(this.itemList[i] * 1).call();
+      item.proofNo = this.itemList[i];
       if (!this.overTime) {
         const current = new Date().getTime();
         if (current < item.timestamp * 1000 + 2 * 24 * 3600 * 1000) {
@@ -103,8 +104,8 @@ class JudgePage extends Component {
   }
 
   handleOk = async e => {
-    const like = this.state.items[this.state.index].like;
-    const dislike = this.state.items[this.state.index].dislike;
+    const like = this.state.selectedItem.like;
+    const dislike = this.state.selectedItem.dislike;
     const address = this.props.auth.values.address;
     if(like.includes(address) || dislike.includes(address)) {
       alert("you already voted!");
@@ -112,10 +113,10 @@ class JudgePage extends Component {
     }
     try {
       const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
-      const gasAmount = await contract.methods.likeProof(this.state.items[this.state.index].proofNo).estimateGas({ 
+      const gasAmount = await contract.methods.likeProof(this.state.selectedItem.proofNo).estimateGas({ 
         from: address
       });
-      contract.methods.likeProof(this.state.items[this.state.index].proofNo).send({ 
+      contract.methods.likeProof(this.state.selectedItem.proofNo).send({ 
         from: address,
         gas: gasAmount
       }).on('transactionHash', (hash) => {
@@ -127,6 +128,7 @@ class JudgePage extends Component {
           visible: false,
         });
         this.props.auth.openPage(1);
+        this.props.auth.openPage(2);
       })
       .on('error', err => {
         alert(err.message);
@@ -141,8 +143,8 @@ class JudgePage extends Component {
 
   handleCancel = async e => {
     if(e.target.className === "ant-btn ant-btn-danger") {
-      const like = this.state.items[this.state.index].like;
-      const dislike = this.state.items[this.state.index].dislike;
+      const like = this.state.selectedItem.like;
+      const dislike = this.state.selectedItem.dislike;
       const address = this.props.auth.values.address;
       if(like.includes(address) || dislike.includes(address)) {
         alert("you already voted!");
@@ -150,10 +152,10 @@ class JudgePage extends Component {
       }
       try {
         const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
-        const gasAmount = await contract.methods.dislikeProof(this.state.items[this.state.index].proofNo).estimateGas({ 
+        const gasAmount = await contract.methods.dislikeProof(this.state.selectedItem.proofNo).estimateGas({ 
           from: this.props.auth.values.address
         });
-        contract.methods.dislikeProof(this.state.items[this.state.index].proofNo).send({ 
+        contract.methods.dislikeProof(this.state.selectedItem.proofNo).send({ 
           from: this.props.auth.values.address,
           gas: gasAmount
         }).on('transactionHash', (hash) => {
@@ -165,6 +167,7 @@ class JudgePage extends Component {
             visible: false,
           });
           this.props.auth.openPage(1);
+          this.props.auth.openPage(2);
         })
         .on('error', err => {
           alert(err.message);
@@ -292,7 +295,7 @@ class JudgePage extends Component {
                 cover={<img alt="proof" src={JSON.parse(item.memo).t} />}
               > 
                 <Button 
-                  style={{
+                  style={{  
                     height: "90px", fontSize: "30px", position: "absolute", 
                     top: "240px", left: "30px", width: "300px" 
                   }}
