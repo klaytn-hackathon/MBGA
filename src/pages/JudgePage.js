@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { observer, inject } from 'mobx-react';
 import { Card, Button } from 'antd';
 import NotJudgePage from './NotJudgePage';
+import ProofCard from '../components/ProofCard';
 import cav from '../klaytn/caver';
 import contractJson from '../../build/contracts/DodoRepository.json';
 
@@ -13,18 +14,50 @@ class JudgePage extends Component {
     judgeItems: [],
     finishedItems: [],
     isReferee: true,
+    visible: true,
+    selectedItem: null,
   };
   itemList = [];
+  overTime = false;
 
-  fetchMoreData = () => {
-    // a fake async api call like which sends
-    // 20 more records in 1.5 secs
-    setTimeout(() => {
-      this.setState({
-        items: this.state.items.concat(Array.from({ length: 12 }))
-      });
-      window.addEventListener("scroll", this.infiniteScroll, true);
-    }, 1500);
+  fetchMoreData = async () => {
+    const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
+    const newJudgeItems = [];
+    const newFinishedItems = [];
+    const address = this.props.auth.values.address;
+    const judgeLength = this.state.judgeItems.length;
+    const finishedLength = this.state.finishedItems.length;
+    for (let i = this.itemList.length - 1 - judgeLength - finishedLength; i >= 0; i -= 1) {
+      const item = await contract.methods.getProof(this.itemList[i] * 1).call();
+      if (!this.overTime) {
+        const current = new Date().getTime();
+        if (current < item.timestamp * 1000 + 2 * 24 * 3600 * 1000) {
+          if(item.like.includes(address) || item.dislike.includes(address)) {
+            newFinishedItems.push(item);
+          } else {
+            newJudgeItems.push(item);
+          }
+        } else {
+          this.overTime = true;
+          newFinishedItems.push(item);
+        }
+      } else {
+        newFinishedItems.push(item);
+      }
+      if (this.overTime && newFinishedItems.length >= 6) {
+        break;
+      }
+    }
+
+    this.setState({
+      judgeItems: this.state.judgeItems.concat(newJudgeItems),
+      finishedItems: this.state.finishedItems.concat(newFinishedItems),
+      loading: false,
+    }, () => {
+      if (newFinishedItems.length !== 0 || newJudgeItems.length !== 0) {
+        window.addEventListener("scroll", this.infiniteScroll, true);
+      }
+    });
   };
   
   infiniteScroll = async () => {
@@ -36,6 +69,13 @@ class JudgePage extends Component {
       window.removeEventListener("scroll", this.infiniteScroll, true);
       this.fetchMoreData();
     }
+  }
+
+  onClickButton = (item) => {
+    this.setState({
+      visible: true,
+      selectedItem: item,
+    })
   }
 
   async componentDidMount() {
@@ -60,6 +100,91 @@ class JudgePage extends Component {
     }
   }
 
+  handleOk = async e => {
+    const like = this.state.items[this.state.index].like;
+    const dislike = this.state.items[this.state.index].dislike;
+    const address = this.props.auth.values.address;
+    if(like.includes(address) || dislike.includes(address)) {
+      alert("you already voted!");
+      return;
+    }
+    try {
+      const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
+      const gasAmount = await contract.methods.likeProof(this.state.items[this.state.index].proofNo).estimateGas({ 
+        from: address
+      });
+      contract.methods.likeProof(this.state.items[this.state.index].proofNo).send({ 
+        from: address,
+        gas: gasAmount
+      }).on('transactionHash', (hash) => {
+        console.log(hash);
+      })
+      .on('receipt', (receipt) => {
+        console.log(receipt);
+        this.setState({
+          visible: false,
+        });
+        this.props.auth.openPage(1);
+      })
+      .on('error', err => {
+        alert(err.message);
+        this.setState({
+          visible: false,
+        });
+      });
+    } catch (e) {
+      return;
+    }
+  }
+
+  handleCancel = async e => {
+    if(e.target.className === "ant-btn ant-btn-danger") {
+      const like = this.state.items[this.state.index].like;
+      const dislike = this.state.items[this.state.index].dislike;
+      const address = this.props.auth.values.address;
+      if(like.includes(address) || dislike.includes(address)) {
+        alert("you already voted!");
+        return;
+      }
+      try {
+        const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
+        const gasAmount = await contract.methods.dislikeProof(this.state.items[this.state.index].proofNo).estimateGas({ 
+          from: this.props.auth.values.address
+        });
+        contract.methods.dislikeProof(this.state.items[this.state.index].proofNo).send({ 
+          from: this.props.auth.values.address,
+          gas: gasAmount
+        }).on('transactionHash', (hash) => {
+          console.log(hash);
+        })
+        .on('receipt', (receipt) => {
+          console.log(receipt);
+          this.setState({
+            visible: false,
+          });
+          this.props.auth.openPage(1);
+        })
+        .on('error', err => {
+          alert(err.message);
+          this.setState({
+            visible: false,
+          });
+        });
+      } catch (e) {
+        alert(e.message);
+        this.setState({
+          visible: false,
+        });
+        return;
+      }
+    } else {
+      this.setState({
+        visible: false,
+      });
+      return;
+    }
+  }
+
   render() {
     if(this.state.loading) {
       return <div>Loading...</div>;
@@ -70,33 +195,63 @@ class JudgePage extends Component {
     const { Meta } = Card;
     const { isLoggedIn } = this.props.auth.values;
     return (
-      
-        <div style={{backgroundColor: "#ffffff"}} >
-          {
-            isLoggedIn ? <LoginHome /> : <NoLoginHome />
-          }
-          <h2 style={{ textAlign: "center", marginTop: "100px"}}>다른 사람의 Life</h2>
-            <div
-              className="ExplorePage-InfiniteScroll"
-              style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "10px auto", width: "70%", justifyContent: "space-between", listStyle: "none", flexFlow: "row wrap", padding: "0" }}
-            >
-            {
-              this.state.items.map((i, index) => (
-                <Card
-                    style={{ width: "360px", height: "360px", margin: "30px auto" }}
-                  >
-                    <Meta
-                      title={`${index}Cdfdfdfdfdfdfdfdfdfdfdfdfdfdf`}
-                    />
-                    <br/> 
-                    <Button style={{ height: "90px", fontSize: "30px", position: "absolute", top: "240px", left: "30px", width: "300px" }}>
-                      내역 보기
-                    </Button>
-                  </Card>
-              ))
-            }
-          </div>
+      <div style={{backgroundColor: "#ffffff", marginTop: "70px"}} >
+        <div>
+          <div>나의 판정</div>
+          <div>판사 취소하기</div>
         </div>
+        <h2 style={{ textAlign: "left", marginTop: "150px"}}>확인해야 할 인증</h2>
+        <div>
+          {
+            this.state.judgeItems.map((item, index) => (
+              <Card
+                style={{ width: "360px", height: "360px", margin: "30px auto" }}
+                cover={<img alt="proof" src={JSON.parse(item.memo).t} />}
+              > 
+                <Button 
+                  style={{
+                    height: "90px", fontSize: "30px", position: "absolute", 
+                    top: "240px", left: "30px", width: "300px" 
+                  }}
+                  onClick={() => this.onClickButton(item)}
+                >
+                  내역 보기
+                </Button>
+              </Card>
+            ))
+          }
+        </div>
+        <h2 style={{ textAlign: "left", marginTop: "150px"}}>이미 종료한 인증</h2>
+        <div
+          className="ExplorePage-InfiniteScroll"
+          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "10px auto", width: "70%", justifyContent: "space-between", listStyle: "none", flexFlow: "row wrap", padding: "0" }}
+        >
+          {
+            this.state.finishedItems.map((item, index) => (
+              <Card
+                style={{ width: "360px", height: "360px", margin: "30px auto" }}
+                cover={<img alt="proof" src={JSON.parse(item.memo).t} />}
+              > 
+                <Button 
+                  style={{
+                    height: "90px", fontSize: "30px", position: "absolute", 
+                    top: "240px", left: "30px", width: "300px" 
+                  }}
+                  onClick={() => this.onClickButton(item)}
+                >
+                  내역 보기
+                </Button>
+              </Card>
+            ))
+          }
+        </div>
+        <ProofCard 
+          handleOk={this.handleOk}
+          handleCancel={this.handleCancel}
+          visible={this.state.visible}
+          proof={ this.state.selectedItem }
+        />
+      </div>
     );
   }
 }

@@ -24,7 +24,7 @@ class ExplorePage extends React.Component {
       const proof = await contract.methods.getProof(i).call();
       proof.proofNo = i;
       newProofs.push(proof);
-      console.log(proof);
+      // console.log(proof);
       if(newProofs.length === 6) break;
     }
     if(newProofs.length === 0) return;
