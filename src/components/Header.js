@@ -23,7 +23,7 @@ class Header extends Component {
     const { Header } = Layout;
     const { page } = this.props.auth.values;
     return (
-      <Header style={{backgroundColor: "#2f54eb"}}>
+      <Header style={{backgroundColor: "#2f54eb", padding: "0px 30px"}}>
           <div style={{float: "left"}}>
             <Menu
               theme="dark"
@@ -47,7 +47,7 @@ class Header extends Component {
               </Menu.Item>
             </Menu>
           </div>
-          <div style={{float: "right"}}>
+          <div style={{position: "absolute", top: "0px", right: "30px"}}>
             <LogoutBtn />
           </div>
       </Header>
