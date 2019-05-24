@@ -16,6 +16,7 @@ class JudgePage extends Component {
     isReferee: true,
     visible: true,
     selectedItem: null,
+    disable: false,
   };
   itemList = [];
   overTime = false;
@@ -71,9 +72,10 @@ class JudgePage extends Component {
     }
   }
 
-  onClickButton = (item) => {
+  onClickButton = (item, disable) => {
     this.setState({
       visible: true,
+      disable,
       selectedItem: item,
     })
   }
@@ -185,6 +187,33 @@ class JudgePage extends Component {
     }
   }
 
+  cancelReferee = async () => {
+    const address = this.props.auth.values.address;
+    try {
+      const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
+      const gasAmount = await contract.methods.cancelReferee().estimateGas({ 
+        from: address, 
+      });
+    
+      contract.methods.cancelReferee().send({ 
+        from: this.props.auth.values.address,
+        gas: gasAmount
+      }).on('transactionHash', (hash) => {
+        console.log(hash);
+      })
+      .on('receipt', (receipt) => {
+        console.log(receipt);
+        this.props.auth.openPage(1);
+        this.props.auth.openPage(2);
+      })
+      .on('error', err => {
+        alert(err.message);
+      });
+    } catch (e) {
+      return;
+    }
+  }
+
   render() {
     if(this.state.loading) {
       return <div>Loading...</div>;
@@ -196,11 +225,33 @@ class JudgePage extends Component {
     const { isLoggedIn } = this.props.auth.values;
     return (
       <div style={{backgroundColor: "#ffffff", marginTop: "70px"}} >
-        <div>
-          <div>나의 판정</div>
-          <div>판사 취소하기</div>
+        <div style={{ justifyContent: "center", display: "flex"}} >
+          <div
+            style={{ 
+              maxWidth: "1300px", minWidth: "375px", margin: "0px auto", width: "70%", 
+              display: "flex", alignItems: "baseline", justifyContent: "space-between",
+            }}
+          >
+            <div style={{ textAlign: "left", fontSize: "30px", fontWeight: "lighter" }}>
+                나의 판정
+            </div>
+            <Button 
+                type="link" 
+                ghost
+                style={{fontSize: "30px", fontWeight: "lighter", color:"#343434"}}
+                onClick={this.cancelReferee}
+              >
+              <div style={{borderBottom: "1px solid #343434"}}>판사 취소하기</div>
+            </Button>
+          </div>
         </div>
-        <h2 style={{ textAlign: "left", marginTop: "150px"}}>확인해야 할 인증</h2>
+        <div
+          style={{ maxWidth: "1300px", minWidth: "375px", margin: "0px auto", width: "70%" }}
+        >
+          <h2 style={{ textAlign: "left", marginTop: "150px", fontSize: "30px", fontWeight: "lighter" }}>
+            확인해야 할 인증
+          </h2>
+        </div>
         <div>
           {
             this.state.judgeItems.map((item, index) => (
@@ -213,7 +264,7 @@ class JudgePage extends Component {
                     height: "90px", fontSize: "30px", position: "absolute", 
                     top: "240px", left: "30px", width: "300px" 
                   }}
-                  onClick={() => this.onClickButton(item)}
+                  onClick={() => this.onClickButton(item, false)}
                 >
                   내역 보기
                 </Button>
@@ -221,7 +272,13 @@ class JudgePage extends Component {
             ))
           }
         </div>
-        <h2 style={{ textAlign: "left", marginTop: "150px"}}>이미 종료한 인증</h2>
+        <div
+          style={{ maxWidth: "1300px", minWidth: "375px", margin: "0px auto", width: "70%" }}
+        >
+          <h2 style={{ textAlign: "left", marginTop: "150px", fontSize: "30px", fontWeight: "lighter"}}>
+            이미 종료한 인증
+          </h2>
+        </div>
         <div
           className="ExplorePage-InfiniteScroll"
           style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "10px auto", width: "70%", justifyContent: "space-between", listStyle: "none", flexFlow: "row wrap", padding: "0" }}
@@ -237,7 +294,7 @@ class JudgePage extends Component {
                     height: "90px", fontSize: "30px", position: "absolute", 
                     top: "240px", left: "30px", width: "300px" 
                   }}
-                  onClick={() => this.onClickButton(item)}
+                  onClick={() => this.onClickButton(item, true)}
                 >
                   내역 보기
                 </Button>
@@ -250,6 +307,7 @@ class JudgePage extends Component {
           handleCancel={this.handleCancel}
           visible={this.state.visible}
           proof={ this.state.selectedItem }
+          disable={ this.state.disable }
         />
       </div>
     );

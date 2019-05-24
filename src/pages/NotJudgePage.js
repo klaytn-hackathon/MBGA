@@ -7,8 +7,14 @@ import contractJson from '../../build/contracts/DodoRepository.json';
 @inject('contract', 'auth')
 @observer
 class NotJudgePage extends Component {
+  state = {
+    iconLoading: false
+  };
 
   applyReferee = async () => {
+    this.setState({
+      iconLoading: true
+    })
     const address = this.props.auth.values.address;
     try {
       const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
@@ -29,8 +35,15 @@ class NotJudgePage extends Component {
       })
       .on('error', err => {
         alert(err.message);
+        this.setState({
+          iconLoading: false
+        });
       });
     } catch (e) {
+      alert(e.message);
+      this.setState({
+        iconLoading: false
+      });
       return;
     }
   }
@@ -49,6 +62,7 @@ class NotJudgePage extends Component {
                 maxWidth: "412px", minWidth: "300px", width: "90%", color: "#979797", 
                 fontSize: "30px", marginTop: "140px", height: "98px", fontWeight: "lighter" 
               }}
+              loading={this.state.iconLoading}
             >
               심사위원이 되기
             </Button>

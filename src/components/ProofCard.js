@@ -28,7 +28,9 @@ class ProofCard extends Component {
   }
 
   render() {
-    const { handleOk, handleCancel, visible, proof } = this.props;
+    const { handleOk, handleCancel, visible, proof, disable } = this.props;
+    let disable2 = disable;
+    if(disable2 == void 0) disable2 = false;
     if(proof == void 0) {
       return <div></div>;
     }
@@ -40,7 +42,8 @@ class ProofCard extends Component {
         onCancel={handleCancel}
         okText={ this.state.isReferee ? "accept" : "like" }
         cancelText={ this.state.isReferee ? "decline" : "dislike" }
-        cancelButtonProps={{type: "danger"}}
+        cancelButtonProps={{type: "danger", disabled: disable2}}
+        okButtonProps={{ disabled: disable2 }}
       >
         <img
           src={JSON.parse(proof.memo).i}
