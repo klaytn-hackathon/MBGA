@@ -2,13 +2,19 @@ import React, { Component } from "react";
 import { observer, inject } from 'mobx-react';
 import { Card, Button } from 'antd';
 import NotJudgePage from './NotJudgePage';
+import cav from '../klaytn/caver';
+import contractJson from '../../build/contracts/DodoRepository.json';
 
 @inject('auth')
 @observer
 class JudgePage extends Component {
   state = {
-    items: Array.from({ length: 12 })
+    loading: true,
+    judgeItems: [],
+    finishedItems: [],
+    isReferee: true,
   };
+  itemList = [];
 
   fetchMoreData = () => {
     // a fake async api call like which sends
@@ -20,15 +26,7 @@ class JudgePage extends Component {
       window.addEventListener("scroll", this.infiniteScroll, true);
     }, 1500);
   };
-
-  refresh = () => {
-    setTimeout(() => {
-      this.setState({
-        items: Array.from({ length: 12 }),
-      });
-    }, 1500);
-  };  
-
+  
   infiniteScroll = async () => {
     const scrollHeight = document.querySelector("main").scrollHeight
     const scrollTop = document.querySelector("main").scrollTop;
@@ -40,11 +38,35 @@ class JudgePage extends Component {
     }
   }
 
-  componentDidMount() {
-    window.addEventListener("scroll", this.infiniteScroll, true);
+  async componentDidMount() {
+    const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
+    const refereeList = await contract.methods.getWhiteList().call();
+    const address = this.props.auth.values.address;
+    
+    if(address == void 0 || address.length === 0) {
+      alert("use after sign in");
+      this.props.auth.openPage("1");
+    }
+    
+    if(refereeList.includes(this.props.auth.values.address)) {
+      const itemList = await contract.methods.getJudgeList(address).call();
+      this.itemList = itemList;
+      this.fetchMoreData();
+    } else {
+      this.setState({
+        loading: false,
+        isReferee: false,
+      });
+    }
   }
 
   render() {
+    if(this.state.loading) {
+      return <div>Loading...</div>;
+    }
+    if(!this.state.isReferee) {
+      return <NotJudgePage />;
+    }
     const { Meta } = Card;
     const { isLoggedIn } = this.props.auth.values;
     return (

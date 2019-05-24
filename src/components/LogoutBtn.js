@@ -78,6 +78,9 @@ class LogoutBtn extends Component {
             variant="outlined"
             onChange={this.handleChange('privateKey')}
           />
+          <a href="https://baobab.klaytnwallet.com/">
+            klaytn 지갑 만들러 가기(test_klay 받으러 가기)
+          </a>
           {
             errors != void 0 ?  
               <div style={{color: "red"}}>{errors.message}</div> : ""

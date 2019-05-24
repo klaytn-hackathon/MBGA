@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import ExplorePage from "./ExplorePage";
-import NotJudgePage from "./NotJudgePage";
+import JudgePage from "./JudgePage";
 import CreateProjectPage from './CreateProjectPage';
 import InputDatePage from './InputDatePage';
 import InputKlayPage from './InputKlayPage';
@@ -19,7 +19,7 @@ class RenderingPage extends Component {
 
     if(page == "2") {
       return (
-        <NotJudgePage />
+        <JudgePage />
       );
     }
 

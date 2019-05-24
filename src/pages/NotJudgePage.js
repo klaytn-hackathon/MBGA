@@ -1,7 +1,39 @@
 import React, { Component } from "react";
+import { observer, inject } from 'mobx-react';
 import { Button, Modal, Input, Row, Col } from 'antd';
+import cav from '../klaytn/caver';
+import contractJson from '../../build/contracts/DodoRepository.json';
 
+@inject('contract', 'auth')
+@observer
 class NotJudgePage extends Component {
+
+  applyReferee = async () => {
+    const address = this.props.auth.values.address;
+    try {
+      const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
+      const gasAmount = await contract.methods.applyReferee().estimateGas({ 
+        from: address, 
+      });
+    
+      contract.methods.applyReferee().send({ 
+        from: this.props.auth.values.address,
+        gas: gasAmount
+      }).on('transactionHash', (hash) => {
+        console.log(hash);
+      })
+      .on('receipt', (receipt) => {
+        console.log(receipt);
+        this.props.auth.openPage(1);
+        this.props.auth.openPage(2);
+      })
+      .on('error', err => {
+        alert(err.message);
+      });
+    } catch (e) {
+      return;
+    }
+  }
 
   render() {
     return (
@@ -12,7 +44,7 @@ class NotJudgePage extends Component {
               심사위원이 되고 Judge를 해보세요!
             </h2>
             <Button 
-              onClick={this.clickStart} 
+              onClick={this.applyReferee} 
               style={{ 
                 maxWidth: "412px", minWidth: "300px", width: "90%", color: "#979797", 
                 fontSize: "30px", marginTop: "140px", height: "98px", fontWeight: "lighter" 
