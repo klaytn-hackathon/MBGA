@@ -6,11 +6,11 @@ contract DodoRepository {
     ProjectStatus[] public statuses;
     ProjectReferees[] public referees;
     mapping(address => uint[]) apMap; // key: participant address, value: project index
+    mapping(address => uint[]) apfMap; // key: participant address, value: proof index
 
     Proof[] public proofs; 
     mapping(uint => uint[]) ppMap; // key: project index, value: proof indexes
     mapping(address => uint[]) rpMap; // key: judge address, value: proof indexes
-
     mapping(uint => Proof) claims; // key: proof index, value: claim
 
     address[] public whiteList;
@@ -152,6 +152,7 @@ contract DodoRepository {
         rpMap[referees[_index].referee1].push(proofs.length - 1);
         rpMap[referees[_index].referee2].push(proofs.length - 1);
         rpMap[referees[_index].referee3].push(proofs.length - 1);
+        apfMap[msg.sender].push(proofs.length - 1);
 
         return true;
     }
@@ -204,6 +205,11 @@ contract DodoRepository {
     * @return bool result of transaction
     */
     function applyReferee() public returns (bool) {
+        for (uint i = 0; i < whiteList.length; i++) {
+            if (whiteList[i] == msg.sender) {
+                return false;
+            }
+        }
         whiteList.push(msg.sender);
         return true;
     }
@@ -389,6 +395,10 @@ contract DodoRepository {
 
     function getJudgeList(address _address) public view returns (uint[] list) {
         return rpMap[_address];
+    }
+
+    function getParticipantProofList(address _address) public view returns (uint[] list) {
+        return apfMap[_address];
     }
 
     /**
