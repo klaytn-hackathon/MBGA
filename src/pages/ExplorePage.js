@@ -158,7 +158,7 @@ class ExplorePage extends React.Component {
           style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "10px auto", width: "70%", justifyContent: "space-between", listStyle: "none", flexFlow: "row wrap", padding: "0" }}
         >
           {
-            this.state.items.map((item, index) => (
+            this.state.items.length > 0 ? this.state.items.map((item, index) => (
               <Card
                 style={{ width: "360px", height: "360px", margin: "30px auto" }}
                 cover={<img alt="proof" src={JSON.parse(item.memo).t} />}
@@ -173,7 +173,7 @@ class ExplorePage extends React.Component {
                   내역 보기
                 </Button>
               </Card>
-            ))
+            )) : <div>내역이 없습니다.</div>
           }
         </div>
         <ProofCard 
