@@ -5,6 +5,7 @@ import NotJudgePage from './NotJudgePage';
 import ProofCard from '../components/ProofCard';
 import cav from '../klaytn/caver';
 import contractJson from '../../build/contracts/DodoRepository.json';
+import RemainTimer from '../components/RemainTimer';
 
 @inject('auth')
 @observer
@@ -264,6 +265,22 @@ class JudgePage extends Component {
                 style={{ width: "360px", height: "360px", margin: "30px auto" }}
                 cover={<img alt="proof" src={JSON.parse(item.memo).t} />}
               > 
+                <div
+                  style={{
+                    height: "36px", fontSize: "30px", position: "absolute", fontWeight: "lighter",
+                    top: "85px", left: "30px", width: "300px", textAlign: "center", color: "#f0f0f0" 
+                  }}
+                >
+                  남은 시간
+                </div>
+                <RemainTimer
+                  style={{
+                    height: "21px", fontSize: "18px", position: "absolute", fontWeight: "lighter",
+                    top: "150px", left: "30px", width: "300px", textAlign: "center", color: "#f0f0f0",
+                    justifyContent: "center",  
+                  }}
+                  timestamp={item.timestamp * 1}
+                />
                 <Button 
                   style={{
                     height: "90px", fontSize: "30px", position: "absolute", 
@@ -271,7 +288,7 @@ class JudgePage extends Component {
                   }}
                   onClick={() => this.onClickButton(item, false)}
                 >
-                  내역 보기
+                  확인하기
                 </Button>
               </Card>
             ))
@@ -293,7 +310,7 @@ class JudgePage extends Component {
               <Card
                 style={{ width: "360px", height: "360px", margin: "30px auto" }}
                 cover={<img alt="proof" src={JSON.parse(item.memo).t} />}
-              > 
+              >
                 <Button 
                   style={{  
                     height: "90px", fontSize: "30px", position: "absolute", 
