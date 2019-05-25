@@ -13,7 +13,7 @@ class CreateProjectPage extends Component {
   
   clickNext = () => {
     this.props.contract.setProjectName(this.state.name);
-    this.props.auth.openPage("4");
+    this.props.auth.openPage("5");
   }
   
   handleChange = name => event => {

@@ -10,8 +10,7 @@ class NoLoginHome extends Component {
   clickStart = () => {
     const { isLoggedIn } = this.props.auth.values;
     if(isLoggedIn) {
-      // this.props.auth.reset();
-      // this.props.contract.resetMine();
+      this.props.auth.openPage("4");
     } else {
       this.showModal();
     }

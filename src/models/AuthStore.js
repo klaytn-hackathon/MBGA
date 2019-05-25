@@ -17,6 +17,7 @@ export default class AuthStore {
     this.values.privateKey = '';
     this.values.address = '';
     this.values.isLoggedIn = false;
+    this.values.page = '1';
     this.errors = void 0;
     this.inProgress = false;
     cav.klay.accounts.wallet.clear();

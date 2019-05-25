@@ -42,7 +42,7 @@ class Header extends Component {
               </Menu.Item>
               <Menu.Item key="3">
                 {
-                  page === "3" ? <div style={styles.openTab}>explore</div> : "explore"
+                  page === "3" ? <div style={styles.openTab}>my</div> : "my"
                 }
               </Menu.Item>
             </Menu>

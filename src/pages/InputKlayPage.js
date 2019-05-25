@@ -18,7 +18,7 @@ class InputKlayPage extends Component {
     const value = this.state.value * 1;
     if(value > 0 && value <= this.state.currentKlay * 1) {
       this.props.contract.setBetAmount(value);
-      this.props.auth.openPage("5");
+      this.props.auth.openPage("6");
     } else {
       alert("Bet amount cannot be over klay amout of address.");
     }

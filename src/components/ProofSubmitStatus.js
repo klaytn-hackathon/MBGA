@@ -19,6 +19,29 @@ class ProofSubmitStatus extends Component {
     });
   }
   
+  submitFinalize = async e => {
+    const projectNo = this.props.projectNo * 1;
+    const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
+    const gasAmount = await contract.methods.finalizeProject(projectNo).estimateGas({ 
+      from: this.props.auth.values.address,
+    });
+
+    contract.methods.finalizeProject(projectNo).send({ 
+      from: this.props.auth.values.address,
+      gas: gasAmount
+    }).on('transactionHash', (hash) => {
+      console.log(hash);
+    })
+    .on('receipt', (receipt) => {
+      console.log(receipt);
+      this.props.auth.openPage("2");
+      this.props.auth.openPage("1");
+    })
+    .on('error', err => {
+      alert(err.message);
+    });
+  }
+
   handleOk = async e => {
     if(this.state.title.length * this.state.imageUrl.length * this.state.thumbUrl.length !== 0) {
       const data = {
@@ -51,8 +74,8 @@ class ProofSubmitStatus extends Component {
           imageUrl: "",
           thumbUrl: "",
         });
-        this.props.auth.openPage(4);
-        this.props.auth.openPage(1);
+        this.props.auth.openPage("2");
+        this.props.auth.openPage("1");
       })
       .on('error', err => {
         alert(err.message);
@@ -125,11 +148,14 @@ class ProofSubmitStatus extends Component {
     const date = Math.floor(new Date().getTime() / 1000);
     if(date > this.props.info.endDate * 1 + this.props.info.claimed * 1 * 3600 * 24 * 2) {
       return (
-        <div style={{ fontSize: "30px", fontWeight: "lighter", color: "#343434" }}>
-          <div style={{ marginRight: "15px", borderBottom: "1px solid #343434" }}>
+        <div>
+          <Button
+            style={{ width: "255px", height: "98px", fontSize: "36px", fontWeight: "lighter" }}
+            onClick={this.submitFinalize}
+          >
             정산하기
-          </div>
-        </div>  
+          </Button>
+        </div>
       );
     }
     if(date > this.props.info.endDate * 1) {

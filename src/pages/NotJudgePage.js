@@ -30,8 +30,8 @@ class NotJudgePage extends Component {
       })
       .on('receipt', (receipt) => {
         console.log(receipt);
-        this.props.auth.openPage(1);
-        this.props.auth.openPage(2);
+        this.props.auth.openPage("1");
+        this.props.auth.openPage("2");
       })
       .on('error', err => {
         alert(err.message);

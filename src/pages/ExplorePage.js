@@ -83,7 +83,7 @@ class ExplorePage extends React.Component {
         this.setState({
           visible: false,
         });
-        this.props.auth.openPage(1);
+        this.props.auth.openPage("1");
       })
       .on('error', err => {
         alert(err.message);
@@ -121,7 +121,7 @@ class ExplorePage extends React.Component {
           this.setState({
             visible: false,
           });
-          this.props.auth.openPage(1);
+          this.props.auth.openPage("1");
         })
         .on('error', err => {
           alert(err.message);

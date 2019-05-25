@@ -5,6 +5,7 @@ import JudgePage from "./JudgePage";
 import CreateProjectPage from './CreateProjectPage';
 import InputDatePage from './InputDatePage';
 import InputKlayPage from './InputKlayPage';
+import MyPage from './MyPage';
 
 @inject('auth')
 @observer
@@ -23,26 +24,27 @@ class RenderingPage extends Component {
       );
     }
 
-    if(page == "3") {
+    if(page == "4") {
       return (
         <CreateProjectPage />
       );
     }
 
-    if(page == "4") {
+    if(page == "5") {
       return (
         <InputKlayPage />
       );
     }
 
-    if(page == "5") {
+    if(page == "6") {
       return (
         <InputDatePage />
       );
     }
 
+    //if(page == "3")
     return (
-      <h1>explore</h1>
+      <MyPage />
     );
   };
 };

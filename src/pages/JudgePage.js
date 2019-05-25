@@ -83,14 +83,13 @@ class JudgePage extends Component {
   }
 
   async componentDidMount() {
-    const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
-    const refereeList = await contract.methods.getWhiteList().call();
     const address = this.props.auth.values.address;
-    
     if(address == void 0 || address.length === 0) {
       alert("use after sign in");
       this.props.auth.openPage("1");
     }
+    const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
+    const refereeList = await contract.methods.getWhiteList().call();
     
     if(refereeList.includes(this.props.auth.values.address)) {
       const itemList = await contract.methods.getJudgeList(address).call();
@@ -128,8 +127,8 @@ class JudgePage extends Component {
         this.setState({
           visible: false,
         });
-        this.props.auth.openPage(1);
-        this.props.auth.openPage(2);
+        this.props.auth.openPage("1");
+        this.props.auth.openPage("2");
       })
       .on('error', err => {
         alert(err.message);
@@ -167,8 +166,8 @@ class JudgePage extends Component {
           this.setState({
             visible: false,
           });
-          this.props.auth.openPage(1);
-          this.props.auth.openPage(2);
+          this.props.auth.openPage("1");
+          this.props.auth.openPage("2");
         })
         .on('error', err => {
           alert(err.message);
@@ -207,8 +206,8 @@ class JudgePage extends Component {
       })
       .on('receipt', (receipt) => {
         console.log(receipt);
-        this.props.auth.openPage(1);
-        this.props.auth.openPage(2);
+        this.props.auth.openPage("1");
+        this.props.auth.openPage("2");
       })
       .on('error', err => {
         alert(err.message);

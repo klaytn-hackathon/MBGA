@@ -66,7 +66,7 @@ class LoginHome extends Component {
   }
 
   createNewProject = () => {
-    this.props.auth.openPage("3");
+    this.props.auth.openPage("4");
   }
 
   render() {
@@ -74,7 +74,7 @@ class LoginHome extends Component {
     if(this.state.loading) {
       return <div style={{textAlign: "center"}}>Loading...</div>
     }
-    if(this.state.items.length === 0) {
+    if(this.state.items.length === 0 && this.props.fromPage !== "my") {
       return <NoLoginHome />;
     }
     return (
