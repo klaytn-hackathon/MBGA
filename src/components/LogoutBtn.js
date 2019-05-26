@@ -11,7 +11,7 @@ class LogoutBtn extends Component {
     const { isLoggedIn } = this.props.auth.values;
     if(isLoggedIn) {
       this.props.auth.reset();
-      this.props.contract.resetMine();
+      this.props.contract.reset();
     } else {
       this.showModal();
     }

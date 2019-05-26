@@ -44,6 +44,14 @@ class ProofCard extends Component {
         cancelText={ this.state.isReferee ? "decline" : "dislike" }
         cancelButtonProps={{type: "danger", disabled: disable2}}
         okButtonProps={{ disabled: disable2 }}
+        footer={[
+          <Button key="back" onClick={this.handleCancel} style={{ width: "50%"}}>
+            Return
+          </Button>,
+          <Button key="submit" type="primary" loading={loading} onClick={this.handleOk} style={{ width: "50%"}}>
+            Submit
+          </Button>,
+        ]}
       >
         <img
           src={JSON.parse(proof.memo).i}

@@ -24,7 +24,7 @@ class LoginHome extends Component {
           const info = await contract.methods.getProjectInfo(projectList[i] * 1).call();
           const status = await contract.methods.getProjectStatus(projectList[i] * 1).call();
           items.push({ info, status, key: projectList[i] });
-          if(items.length >= 2) break;
+          if(items.length >= 3 && this.props.fromPage !== "my") break;
         }
         this.setState({
           loading: false,
@@ -51,7 +51,7 @@ class LoginHome extends Component {
         const info = await contract.methods.getProjectInfo(projectList[i] * 1).call();
         const status = await contract.methods.getProjectStatus(projectList[i] * 1).call();
         items.push({ info, status, key: projectList[i] });
-        if(items.length >= 2) break;
+        if(items.length >= 3 && this.props.fromPage !== "my") break;
       }
       this.setState({
         loading: false,
@@ -83,7 +83,7 @@ class LoginHome extends Component {
           <div style={{ textAlign: "center", fontSize: "30px", fontWeight: "lighter"}}>MyLife</div>
         </div>
         {
-          this.state.items.map((item) => {
+          this.state.items.length > 0 ? this.state.items.map((item) => {
             return (
               <div key={item.key} style={{ height: "232px", borderTop: "1px solid #979797", borderBottom: "1px solid #979797", marginBottom: "22px"}}>
                 <Row type="flex" align="middle" justify="center" style={{ height: "100%" }}>
@@ -101,7 +101,9 @@ class LoginHome extends Component {
                 </Row>
               </div>
             );
-          })
+          }) : <div>
+            내역이 없습니다.
+          </div>
         }
         
         <div style={{ justifyContent: "center", alignItems: "center", textAlign: "center", marginTop: "20px", fontSize: "30px", fontWeight: "lighter", textDecoration: "underline"}}>

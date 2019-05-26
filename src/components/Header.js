@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Layout, Menu } from 'antd';
 import LogoutBtn from './LogoutBtn';
-import logo from '../static/logo.png';
+import logo from '../static/logo2.png';
 
 const styles = {
   openTab: {
@@ -33,7 +33,7 @@ class Header extends Component {
               onClick={this.handleChange}
             >
               <Menu.Item key="1">
-                home
+                <img src={logo} alt="POC" height="40px" />
               </Menu.Item>
               <Menu.Item key="2">
                 {

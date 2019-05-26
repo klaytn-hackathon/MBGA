@@ -231,7 +231,7 @@ class JudgePage extends Component {
         <div style={{ justifyContent: "center", display: "flex"}} >
           <div
             style={{ 
-              maxWidth: "1300px", minWidth: "375px", margin: "0px auto", width: "70%", 
+              maxWidth: "1300px", minWidth: "375px", margin: "0px auto", width: "75%", 
               display: "flex", alignItems: "baseline", justifyContent: "space-between",
             }}
           >
@@ -249,14 +249,14 @@ class JudgePage extends Component {
           </div>
         </div>
         <div
-          style={{ maxWidth: "1300px", minWidth: "375px", margin: "0px auto", width: "70%" }}
+          style={{ maxWidth: "1300px", minWidth: "375px", margin: "0px auto", width: "75%" }}
         >
           <h2 style={{ textAlign: "left", marginTop: "150px", fontSize: "30px", fontWeight: "lighter" }}>
             확인해야 할 인증
           </h2>
         </div>
         <div
-          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "10px auto", width: "70%", justifyContent: "space-between", listStyle: "none", flexFlow: "row wrap", padding: "0" }}
+          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "10px auto", width: "75%", justifyContent: "space-between", listStyle: "none", flexFlow: "row wrap", padding: "0" }}
         >
           {
             this.state.judgeItems.length > 0 ? this.state.judgeItems.map((item, index) => (
@@ -294,7 +294,7 @@ class JudgePage extends Component {
           }
         </div>
         <div
-          style={{ maxWidth: "1300px", minWidth: "375px", margin: "0px auto", width: "70%" }}
+          style={{ maxWidth: "1300px", minWidth: "375px", margin: "0px auto", width: "75%" }}
         >
           <h2 style={{ textAlign: "left", marginTop: "150px", fontSize: "30px", fontWeight: "lighter"}}>
             이미 종료한 인증
@@ -302,7 +302,7 @@ class JudgePage extends Component {
         </div>
         <div
           className="ExplorePage-InfiniteScroll"
-          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "10px auto", width: "70%", justifyContent: "space-between", listStyle: "none", flexFlow: "row wrap", padding: "0" }}
+          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "10px auto", width: "75%", justifyContent: "space-between", listStyle: "none", flexFlow: "row wrap", padding: "0" }}
         >
           {
             this.state.finishedItems.length > 0 ? this.state.finishedItems.map((item, index) => (

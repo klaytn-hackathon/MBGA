@@ -8,7 +8,7 @@ import contractJson from '../../build/contracts/DodoRepository.json';
 @inject('contract', 'auth')
 @observer
 class InputDatePage extends Component {
-  state = { date: "", visible: false, };
+  state = { date: "", visible: false, loading: false, };
   
   componentDidMount() {
     const date = new Date(new Date().getTime() + 24 * 3600 * 1000 * 7);
@@ -41,6 +41,7 @@ class InputDatePage extends Component {
   }
 
   handleOk = async e => {
+    this.setState({ loading: true });
     try {
       const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
       const gasAmount = await contract.methods.createProject(this.props.contract.projectName,
@@ -67,6 +68,7 @@ class InputDatePage extends Component {
         console.log(receipt);
         this.setState({
           visible: false,
+          loading: false,
         });
         this.props.auth.openPage("1");
       })
@@ -74,6 +76,7 @@ class InputDatePage extends Component {
         alert(err.message);
         this.setState({
           visible: false,
+          loading: false,
         });
       });
     } catch (e) {
@@ -124,8 +127,14 @@ class InputDatePage extends Component {
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
-          okText="Submit"
-          cancelText="Cancel"
+          footer={[
+            <Button key="back" onClick={this.handleCancel} style={{ width: "48%", marginRight: "4%"}}>
+              Cancel
+            </Button>,
+            <Button key="submit" type="primary" onClick={this.handleOk} loading={this.state.loading} style={{ width: "48%", margin: "0px"}}>
+              Submit
+            </Button>,
+          ]}
         >
           <div>{this.props.contract.projectName}</div>
           <div>{this.props.contract.betAmount} KLAY</div>

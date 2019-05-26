@@ -155,7 +155,7 @@ class ExplorePage extends React.Component {
         <h2 style={{ textAlign: "center", marginTop: "100px"}}>다른 사람의 Life</h2>
         <div
           className="ExplorePage-InfiniteScroll"
-          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "10px auto", width: "70%", justifyContent: "space-between", listStyle: "none", flexFlow: "row wrap", padding: "0" }}
+          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "10px auto", width: "75%", justifyContent: "space-between", listStyle: "none", flexFlow: "row wrap", padding: "0" }}
         >
           {
             this.state.items.length > 0 ? this.state.items.map((item, index) => (

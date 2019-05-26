@@ -15,13 +15,13 @@ class MyPage extends React.Component {
     index: 0,
     visible: false,
   };
-  proofCount = 0;
+  proofList = [];
 
   fetchMoreData = async () => {
     const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
     const newProofs = [];
-    for(let i = this.proofCount - 1 - this.state.items.length; i >= 0; i -= 1) {
-      const proof = await contract.methods.getProof(i).call();
+    for(let i = this.proofList.length - 1 - this.state.items.length; i >= 0; i -= 1) {
+      const proof = await contract.methods.getProof(this.proofList[i]).call();
       proof.proofNo = i;
       newProofs.push(proof);
       // console.log(proof);
@@ -59,8 +59,9 @@ class MyPage extends React.Component {
       this.props.auth.openPage("1");
     }
     const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
-    const proofCount = await contract.methods.getAllProofsCount().call();
-    this.proofCount = proofCount;
+    const proofList = await contract.methods.getParticipantProofList(address).call();
+    console.log(proofList);
+    this.proofList = proofList;
     this.fetchMoreData();
   }
 
@@ -158,7 +159,7 @@ class MyPage extends React.Component {
         <h2 style={{ textAlign: "center", marginTop: "100px"}}>나의 종료된 도전</h2>
         <div
           className="ExplorePage-InfiniteScroll"
-          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "10px auto", width: "70%", justifyContent: "space-between", listStyle: "none", flexFlow: "row wrap", padding: "0" }}
+          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "10px auto", width: "75%", justifyContent: "space-between", listStyle: "none", flexFlow: "row wrap", padding: "0" }}
         >
           {
             this.state.items.length > 0 ? this.state.items.map((item, index) => (
