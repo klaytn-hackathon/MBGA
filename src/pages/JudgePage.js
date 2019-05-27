@@ -310,15 +310,17 @@ class JudgePage extends Component {
                 style={{ width: "360px", height: "360px", margin: "30px auto" }}
                 cover={<img alt="proof" src={JSON.parse(item.memo).t} />}
               >
-                <Button 
+                <div 
                   style={{  
-                    height: "90px", fontSize: "30px", position: "absolute", 
-                    top: "240px", left: "30px", width: "300px" 
+                    height: "21px", fontSize: "18px", position: "absolute", fontWeight: "lighter",
+                    top: "274px", left: "30px", width: "300px", textAlign: "center", 
                   }}
-                  onClick={() => this.onClickButton(item, true)}
                 >
-                  내역 보기
-                </Button>
+                  { 
+                    item.like.includes(this.props.auth.values.address) ? "Proof Success" 
+                    : item.dislike.includes(this.props.auth.values.address) ? "Proof Fail" : "Time Out"
+                  }
+                </div>
               </Card>
             )) : <div>내역이 없습니다.</div>
           }
