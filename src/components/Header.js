@@ -33,7 +33,7 @@ class Header extends Component {
               onClick={this.handleChange}
             >
               <Menu.Item key="1">
-                <img src={logo} alt="POC" height="40px" />
+                <img src={logo} alt="POC" height="30px" />
               </Menu.Item>
               <Menu.Item key="2">
                 {

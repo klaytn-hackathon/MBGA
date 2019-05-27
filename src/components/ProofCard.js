@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Modal } from 'antd';
+import { Modal, Button } from 'antd';
 import cav from '../klaytn/caver';
 import contractJson from '../../build/contracts/DodoRepository.json';
 
@@ -28,30 +28,36 @@ class ProofCard extends Component {
   }
 
   render() {
-    const { handleOk, handleCancel, visible, proof, disable } = this.props;
+    const { handleOk, handleCancel, visible, proof, disable, loading } = this.props;
     let disable2 = disable;
     if(disable2 == void 0) disable2 = false;
     if(proof == void 0) {
       return <div></div>;
     }
+    let loading2 = loading;
+    if(loading2 == void 0) loading2 = false;
     return (
       <Modal
         title={ this.state.isReferee ? "Judge" : "Look" }
         visible={visible}
         onOk={handleOk}
         onCancel={handleCancel}
-        okText={ this.state.isReferee ? "accept" : "like" }
-        cancelText={ this.state.isReferee ? "decline" : "dislike" }
         cancelButtonProps={{type: "danger", disabled: disable2}}
         okButtonProps={{ disabled: disable2 }}
-        footer={[
-          <Button key="back" onClick={this.handleCancel} style={{ width: "50%"}}>
-            Return
-          </Button>,
-          <Button key="submit" type="primary" loading={loading} onClick={this.handleOk} style={{ width: "50%"}}>
-            Submit
-          </Button>,
-        ]}
+        footer={
+          <div style={{display: "flex", justifyContent: "space-between"}}>
+            <Button key="back" onClick={handleCancel} style={{ width: "50%"}} 
+              disabled={disable2} loading={loading2} type="danger"
+            >
+              { this.state.isReferee ? "decline" : "dislike" }
+            </Button>
+            <Button key="submit" type="primary" loading={loading2} onClick={handleOk} 
+              style={{ width: "50%"}} disabled={disable2}
+            >
+              { this.state.isReferee ? "accept" : "like" }
+            </Button>
+          </div>
+        }
       >
         <img
           src={JSON.parse(proof.memo).i}
