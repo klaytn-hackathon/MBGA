@@ -46,7 +46,7 @@ class InputDatePage extends Component {
       const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
       const gasAmount = await contract.methods.createProject(this.props.contract.projectName,
         "",
-        this.props.contract.startTime - 24 * 3600,
+        this.props.contract.startTime,
         this.props.contract.endTime
       ).estimateGas({ 
         from: this.props.auth.values.address, 
@@ -55,7 +55,7 @@ class InputDatePage extends Component {
     
       contract.methods.createProject(this.props.contract.projectName,
         "",
-        this.props.contract.startTime - 24 * 3600,
+        this.props.contract.startTime,
         this.props.contract.endTime
       ).send({ 
         from: this.props.auth.values.address, 
