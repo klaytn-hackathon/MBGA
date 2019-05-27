@@ -184,10 +184,10 @@ class MyPage extends React.Component {
   }
 
   handleTime = proof => {
-    const startDate = new Date(proof * 1000);
-    const endDate = new Date(proof * 1000 - 24 * 3600);
-    return `${startDate.getFullYear()}. ${startDate.getMonth() + 1}. ${startDate.getDate()}\n
-      ~ ${endDate.getFullYear()}. ${endDate.getMonth() + 1}. ${endDate.getDate()}`;
+    const startDate = new Date(proof.startDate * 1000);
+    const endDate = new Date(proof.endDate * 1000 - 24 * 3600);
+    return <div>{startDate.getFullYear()}. {startDate.getMonth() + 1}. {startDate.getDate()}<br />
+      ~ {endDate.getFullYear()}. {endDate.getMonth() + 1}. {endDate.getDate()}</div>;
   }
 
   render() {
@@ -209,7 +209,7 @@ class MyPage extends React.Component {
               > 
                 <div 
                   style={{
-                    height: "90px", fontSize: "48px", position: "absolute", color: "#343434",
+                    fontSize: "48px", position: "absolute", color: "#343434",
                     top: "30px", left: "24px", width: "312px", fontWeight: "lighter" 
                   }}
                 >
@@ -219,8 +219,8 @@ class MyPage extends React.Component {
                 </div>
                 <div 
                   style={{
-                    height: "115px", fontSize: "30px", position: "absolute", color: "#343434",
-                    top: "30px", left: "24px", width: "312px", fontWeight: "lighter"
+                    fontSize: "30px", position: "absolute", color: "#343434",
+                    top: "115px", left: "24px", width: "312px", fontWeight: "lighter"
                   }}
                 >
                   { item.title }
