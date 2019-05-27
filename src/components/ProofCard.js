@@ -42,17 +42,15 @@ class ProofCard extends Component {
         visible={visible}
         onOk={handleOk}
         onCancel={handleCancel}
-        cancelButtonProps={{type: "danger", disabled: disable2}}
-        okButtonProps={{ disabled: disable2 }}
         footer={
           <div style={{display: "flex", justifyContent: "space-between"}}>
-            <Button key="back" onClick={handleCancel} style={{ width: "50%"}} 
+            <Button key="back" onClick={handleCancel} style={{ width: "49%"}} 
               disabled={disable2} loading={loading2} type="danger"
             >
               { this.state.isReferee ? "decline" : "dislike" }
             </Button>
             <Button key="submit" type="primary" loading={loading2} onClick={handleOk} 
-              style={{ width: "50%"}} disabled={disable2}
+              style={{ width: "49%"}} disabled={disable2}
             >
               { this.state.isReferee ? "accept" : "like" }
             </Button>

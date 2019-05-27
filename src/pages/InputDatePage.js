@@ -8,7 +8,7 @@ import contractJson from '../../build/contracts/DodoRepository.json';
 @inject('contract', 'auth')
 @observer
 class InputDatePage extends Component {
-  state = { date: "", visible: false, loading: false, };
+  state = { date: null, visible: false, loading: false, };
   
   componentDidMount() {
     const date = new Date(new Date().getTime() + 24 * 3600 * 1000 * 7);
@@ -85,6 +85,7 @@ class InputDatePage extends Component {
   }
 
   handleCancel = e => {
+    console.log(1)
     this.setState({
       visible: false,
     });
@@ -125,16 +126,20 @@ class InputDatePage extends Component {
         <Modal
           title="Sign Transaction"
           visible={this.state.visible}
-          onOk={this.handleOk}
           onCancel={this.handleCancel}
-          footer={[
-            <Button key="back" onClick={this.handleCancel} style={{ width: "48%", marginRight: "4%"}}>
-              Cancel
-            </Button>,
-            <Button key="submit" type="primary" onClick={this.handleOk} loading={this.state.loading} style={{ width: "48%", margin: "0px"}}>
-              Submit
-            </Button>,
-          ]}
+          footer={
+            <div style={{display: "flex", justifyContent: "space-between"}}>
+              <Button key="back" onClick={this.handleCancel} style={{ width: "49%"}}
+              >
+                Cancel
+              </Button>
+              <Button key="submit" type="primary" loading={this.state.loading} onClick={this.handleOk} 
+                style={{ width: "49%"}}
+              >
+                Submit
+              </Button>
+            </div>
+          }
         >
           <div>{this.props.contract.projectName}</div>
           <div>{this.props.contract.betAmount} KLAY</div>

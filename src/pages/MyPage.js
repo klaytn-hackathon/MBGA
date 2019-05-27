@@ -30,6 +30,8 @@ class MyPage extends React.Component {
         this.project[proof.projectNo] = { referees, info };
       }
       proof.title = this.project[proof.projectNo].info.name;
+      proof.startDate = this.project[proof.projectNo].info.startDate;
+      proof.endDate = this.project[proof.projectNo].info.endDate;
       const refereeList = this.project[proof.projectNo].referees;
       if(new Date().getTime() / 1000 > proof.timestamp + 48 * 3600) {
         if(proof.judged === 129) {
@@ -181,6 +183,13 @@ class MyPage extends React.Component {
     }
   }
 
+  handleTime = proof => {
+    const startDate = new Date(proof * 1000);
+    const endDate = new Date(proof * 1000 - 24 * 3600);
+    return `${startDate.getFullYear()}. ${startDate.getMonth() + 1}. ${startDate.getDate()}\n
+      ~ ${endDate.getFullYear()}. ${endDate.getMonth() + 1}. ${endDate.getDate()}`;
+  }
+
   render() {
     const { Meta } = Card;
     const { isLoggedIn } = this.props.auth.values;
@@ -198,15 +207,34 @@ class MyPage extends React.Component {
                 style={{ width: "360px", height: "360px", margin: "30px auto" }}
                 cover={<img alt="proof" src={JSON.parse(item.memo).t} />}
               > 
-                <Button 
+                <div 
                   style={{
-                    height: "90px", fontSize: "30px", position: "absolute", 
-                    top: "240px", left: "30px", width: "300px" 
+                    height: "90px", fontSize: "48px", position: "absolute", color: "#343434",
+                    top: "30px", left: "24px", width: "312px", fontWeight: "lighter" 
                   }}
-                  onClick={() => this.onClickButton(index)}
                 >
-                  내역 보기
-                </Button>
+                  {
+                    item.status == void 0 ? "인증 중" : item.status ? "성공" : "실패"
+                  }
+                </div>
+                <div 
+                  style={{
+                    height: "115px", fontSize: "30px", position: "absolute", color: "#343434",
+                    top: "30px", left: "24px", width: "312px", fontWeight: "lighter"
+                  }}
+                >
+                  { item.title }
+                </div>
+                <div 
+                  style={{
+                    height: "205px", fontSize: "30px", position: "absolute", color: "#343434",
+                    top: "240px", left: "24px", width: "312px", fontWeight: "lighter" 
+                  }}
+                >
+                  {
+                    this.handleTime(item)
+                  }
+                </div>
               </Card>
             )) : <div>
               내역이 없습니다.
