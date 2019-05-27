@@ -6,11 +6,11 @@ contract DodoRepository {
     ProjectStatus[] public statuses;
     ProjectReferees[] public referees;
     mapping(address => uint[]) apMap; // key: participant address, value: project index
-    mapping(address => uint[]) apfMap; // key: participant address, value: proof index
 
     Proof[] public proofs; 
     mapping(uint => uint[]) ppMap; // key: project index, value: proof indexes
     mapping(address => uint[]) rpMap; // key: judge address, value: proof indexes
+
     mapping(uint => Proof) claims; // key: proof index, value: claim
 
     address[] public whiteList;
@@ -118,6 +118,7 @@ contract DodoRepository {
         ProjectStatus memory status = statuses[_index];
         require(now >= info.endDate + period * (status.claimed + 1),
             "This transaction must be fired after claim date finished!");
+        require(status.active == true);
         uint successCount = 0;
         for (uint i = 0; i < ppMap[_index].length; i++) {
             if (calculateProof(ppMap[_index][i])) successCount += 1;
@@ -152,7 +153,6 @@ contract DodoRepository {
         rpMap[referees[_index].referee1].push(proofs.length - 1);
         rpMap[referees[_index].referee2].push(proofs.length - 1);
         rpMap[referees[_index].referee3].push(proofs.length - 1);
-        apfMap[msg.sender].push(proofs.length - 1);
 
         return true;
     }
@@ -205,11 +205,6 @@ contract DodoRepository {
     * @return bool result of transaction
     */
     function applyReferee() public returns (bool) {
-        for (uint i = 0; i < whiteList.length; i++) {
-            if (whiteList[i] == msg.sender) {
-                return false;
-            }
-        }
         whiteList.push(msg.sender);
         return true;
     }
@@ -397,10 +392,6 @@ contract DodoRepository {
         return rpMap[_address];
     }
 
-    function getParticipantProofList(address _address) public view returns (uint[] list) {
-        return apfMap[_address];
-    }
-
     /**
     * @dev Get Claim
     * @param _index proof index  
@@ -465,6 +456,7 @@ contract DodoRepository {
         uint successCount = 0;
         uint failCount = 0;
 
+        Proof memory proof = proofs[_index];
         if (proof.judged == 129) {
             return false;
         }
@@ -473,7 +465,6 @@ contract DodoRepository {
             return true;
         }
 
-        Proof memory proof = proofs[_index];
         if (proof.judged / 64 == 1) {
             proof.judged %= 64;
             successCount += 1;
@@ -504,7 +495,7 @@ contract DodoRepository {
 
         if (successCount > failCount) {
             return proof.like.length + 10 > proof.dislike.length;
-        } else if (failCount < successCount) {
+        } else if (failCount > successCount) {
             return proof.like.length > proof.dislike.length;
         } else {
             return proof.like.length + 5 > proof.dislike.length;
