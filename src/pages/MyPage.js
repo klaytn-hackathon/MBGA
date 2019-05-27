@@ -16,13 +16,44 @@ class MyPage extends React.Component {
     visible: false,
   };
   proofList = [];
+  project = {};
 
   fetchMoreData = async () => {
     const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
     const newProofs = [];
     for(let i = this.proofList.length - 1 - this.state.items.length; i >= 0; i -= 1) {
       const proof = await contract.methods.getProof(this.proofList[i]).call();
-      proof.proofNo = i;
+      proof.proofNo = this.proofList[i];
+      if(!this.project.hasOwnProperty(proof.projectNo)) {
+        const referees = await contract.methods.getProjectReferees(proof.projectNo).call();
+        const info = await contract.methods.getProjectInfo(proof.projectNo).call();
+        this.project[proof.projectNo] = { referees, info };
+      }
+      proof.title = this.project[proof.projectNo].info.name;
+      const refereeList = this.project[proof.projectNo].referees;
+      if(new Date().getTime() / 1000 > proof.timestamp + 48 * 3600) {
+        if(proof.judged === 129) {
+          proof.status = false;
+        } else if(proof.judged === 128) {
+          proof.status = true;
+        } else {
+          let successCount = 0;
+          let failCount = 0;
+          for(let i = 0; i < 3; i++) {
+            if(proof.like.includes[refereeList[i]]) successCount += 1;
+            if(proof.dislike.includes[refereeList[i]]) failCount += 1;
+            if(successCount >= 2) proof.status = true;
+            else if(failCount >= 2) proof.status = false;
+            else if(proof.like.length + 5 * (successCount - failCount) + 5 >= proof.dislike.count) {
+              proof.status = true;
+            } else {
+              proof.status = false;
+            }
+          }
+        }
+      } else {
+        proof.status = void 0;
+      }
       newProofs.push(proof);
       // console.log(proof);
       if(newProofs.length === 6) break;
