@@ -37,37 +37,44 @@ class InputKlayPage extends Component {
     return (
       <div style={{backgroundColor: "#ffffff", height: "100%", width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
         <div style={{ justifyContent: "center", alignItems: "center", display: "block", textAlign: "center" }}>
-          <h2 style={{color: "#979797", fontSize: "24px", fontWeight: "lighter"}}>
-            담보 금액은 얼마입니까?
-          </h2>
+          <div style={{color: "#343434", fontSize: "18px", fontWeight: "lighter"}}>
+            How much would you like to pay for collateral KLAY?
+          </div>
+          <div style={{color: "#343434", fontSize: "12px", fontWeight: "lighter", marginTop: "44px"}}>
+            After successfully exiting the challenge, it is returned.
+          </div>
           <div>
-          <Input
-            name="name"
-            value={this.state.value}
-            type="dashed"
-            style={{ 
-              maxWidth: "692px", minWidth: "375px", width: "60%", color: "#979797", 
-              fontSize: "30px", marginTop: "140px", height: "88px", fontWeight: "lighter", marginRight: "4px" 
-            }}
-            placeholder="0"
-            onChange={this.handleChange('value')}
-          >
-          </Input>
-           KLAY
+            <Input
+              name="name"
+              value={this.state.value}
+              type="dashed"
+              style={{ 
+                maxWidth: "412px", minWidth: "375px", width: "30%", 
+                marginTop: "74px", height: "40px", fontWeight: "lighter" 
+              }}
+              placeholder="Input your collateral KLAY"
+              onChange={this.handleChange('value')}
+            />
           </div>
-          <div style={{ textAlign: "right", marginTop: "13px", 
-            fontSize: "24px", fontWeight: "lighter", color: "#979797" }}>
-            나의 KLAY: {Math.floor(this.state.currentKlay * 100) / 100}
+          <div style={{ textAlign: "right", marginTop: "14px",
+            maxWidth: "412px", minWidth: "375px", width: "30%",
+            fontSize: "12px", fontWeight: "lighter", color: "#343434" }}>
+            My KLAY: {Math.floor(this.state.currentKlay * 100) / 100}
           </div>
-          <Button 
-            onClick={this.clickNext} 
-            style={{ 
-              maxWidth: "525px", minWidth: "375px", width: "55%", color: "#979797", 
-              fontSize: "30px", marginTop: "140px", height: "98px", fontWeight: "lighter" 
-            }}
-          >
-            다음 단계로
-          </Button>
+          <div>
+            <Button 
+              onClick={this.clickNext} 
+              style={{ 
+                maxWidth: "412px", minWidth: "375px", width: "30%", marginTop: "74px", 
+                backgroundColor: "#2f54eb", borderColor: "#2f54eb",
+                fontWeight: "bold"
+              }}
+              type="primary" shape="round"
+              size="large"
+            >
+              NEXT
+            </Button>
+          </div>
         </div>
       </div>
     );

@@ -95,15 +95,15 @@ class InputDatePage extends Component {
     return (
       <div style={{backgroundColor: "#ffffff", height: "100%", width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
         <div style={{ justifyContent: "center", alignItems: "center", display: "block", textAlign: "center" }}>
-          <h2 style={{color: "#979797", fontSize: "24px", fontWeight: "lighter"}}>
-            언제까지 도전하시겠습니까?
-          </h2>
-          <h3 style={{color: "#979797", fontSize: "17px", fontWeight: "lighter"}}>
-            내일부터 하루에 한번 인증해야 합니다.
-          </h3>
+          <div style={{color: "#343434", fontSize: "18px", fontWeight: "lighter"}}>
+            From tomorrow until when?
+          </div>
+          <div style={{color: "#343434", fontSize: "12px", fontWeight: "lighter", marginTop: "44px"}}>
+            You have to authenticate it once a day.
+          </div>
           <div>
             <DatePicker 
-              style={{ marginRight: "30px", marginTop: "140px"}}
+              style={{ marginTop: "74px", width: "224px"}}
               placeholder="select end date"
               size="large"
               format={"YYYY-MM-DD"}
@@ -111,17 +111,21 @@ class InputDatePage extends Component {
               value={this.state.date}
               onChange={value => this.setState({'date': value})}
             />
-           일까지
           </div>
-          <Button 
-            onClick={this.clickNext} 
-            style={{ 
-              maxWidth: "525px", minWidth: "375px", width: "55%", color: "#979797", 
-              fontSize: "30px", marginTop: "140px", height: "98px", fontWeight: "lighter" 
-            }}
-          >
-            다음 단계로
-          </Button>
+          <div>
+            <Button 
+              onClick={this.clickNext} 
+              style={{ 
+                maxWidth: "412px", minWidth: "375px", width: "30%", marginTop: "125px", 
+                backgroundColor: "#2f54eb", borderColor: "#2f54eb",
+                fontWeight: "bold"
+              }}
+              type="primary" shape="round"
+              size="large"
+            >
+              START IT!
+            </Button>
+          </div>
         </div>
         <Modal
           title="Sign Transaction"
