@@ -27,7 +27,7 @@ class LoginHome extends Component {
           let timestamp = 0;
           if(proofList.length !== 0) {
             const proof = await contract.methods.getProof(proofList[proofList.length - 1]).call();
-            timestamp = proof.timestamp;
+            timestamp = proof.timestamp * 1;
           }
           items.push({ info, status, key: projectList[i], timestamp });
           if(items.length >= 3 && this.props.fromPage !== "my") break;
@@ -56,7 +56,13 @@ class LoginHome extends Component {
       for(let i = projectList.length - 1; i >= 0; i -= 1) {
         const info = await contract.methods.getProjectInfo(projectList[i] * 1).call();
         const status = await contract.methods.getProjectStatus(projectList[i] * 1).call();
-        items.push({ info, status, key: projectList[i] });
+        const proofList = await contract.methods.getProofList(projectList[i] * 1).call();
+        let timestamp = 0;
+        if(proofList.length !== 0) {
+          const proof = await contract.methods.getProof(proofList[proofList.length - 1]).call();
+          timestamp = proof.timestamp * 1;
+        }
+        items.push({ info, status, key: projectList[i], timestamp });
         if(items.length >= 3 && this.props.fromPage !== "my") break;
       }
       this.setState({
@@ -103,7 +109,7 @@ class LoginHome extends Component {
                     </div>
                   </Col>
                   <Col span={6} style={{alignItems: "center", display: "flex", justifyContent: "flex-end"}}>
-                    <ProofSubmitStatus info={item.info} status={item.status} projectNo={item.key} timestamp={item.timestamp} />
+                    <ProofSubmitStatus info={item.info} status={item.status} projectNo={item.key} timestamp={item.timestamp * 1} />
                   </Col>
                 </Row>
               </div>

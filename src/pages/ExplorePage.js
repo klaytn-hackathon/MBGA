@@ -5,7 +5,7 @@ import NoLoginHome from '../components/NoLoginHome';
 import LoginHome from '../components/LoginHome';
 import cav from '../klaytn/caver';
 import contractJson from '../../build/contracts/DodoRepository.json';
-import ProofCard from '../components/ProofCard';
+import ProofCard from '../components/ExploreProofCard';
 import footerBackgroundImage from '../static/challenge2.png'
 
 @inject('auth')
@@ -70,6 +70,10 @@ class ExplorePage extends React.Component {
     const like = this.state.items[this.state.index].like;
     const dislike = this.state.items[this.state.index].dislike;
     const address = this.props.auth.values.address;
+    if(address.length === 0) {
+      alert("you are not sign in");
+      return;
+    }
     if(like.includes(address) || dislike.includes(address)) {
       alert("you already voted!");
       return;
@@ -111,12 +115,16 @@ class ExplorePage extends React.Component {
       this.showModal();
     }
   }
-  
+
   handleCancel = async e => {
     if(e.target.className === "ant-btn ant-btn-danger") {
       const like = this.state.items[this.state.index].like;
       const dislike = this.state.items[this.state.index].dislike;
       const address = this.props.auth.values.address;
+      if(address.length === 0) {
+        alert("you are not sign in");
+        return;
+      }
       if(like.includes(address) || dislike.includes(address)) {
         alert("you already voted!");
         return;
