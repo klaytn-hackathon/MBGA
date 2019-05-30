@@ -80,10 +80,10 @@ class ExplorePage extends React.Component {
     }
     try {
       const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
-      const gasAmount = await contract.methods.likeProof(this.state.items[this.state.index].proofNo).estimateGas({ 
+      const gasAmount = await contract.methods.dislikeProof(this.state.items[this.state.index].proofNo).estimateGas({ 
         from: address
       });
-      contract.methods.likeProof(this.state.items[this.state.index].proofNo).send({ 
+      contract.methods.dislikeProof(this.state.items[this.state.index].proofNo).send({ 
         from: address,
         gas: gasAmount
       }).on('transactionHash', (hash) => {
