@@ -186,10 +186,10 @@ class ProofSubmitStatus extends Component {
     return (
       <div>
         <Button
-          style={{ width: "255px", height: "98px", fontSize: "36px", fontWeight: "lighter" }}
+          style={{ width: "130px", height: "40px", fontSize: "14px", fontWeight: "lighter", color: "white", backgroundColor: "#1890ff" }}
           onClick={this.openModal}
         >
-          인증하기
+          Proof it
         </Button>
         <Modal
           title="Submit Proof"

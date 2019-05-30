@@ -6,6 +6,7 @@ import LoginHome from '../components/LoginHome';
 import cav from '../klaytn/caver';
 import contractJson from '../../build/contracts/DodoRepository.json';
 import ProofCard from '../components/ProofCard';
+import footerBackgroundImage from '../static/challenge2.png'
 
 @inject('auth')
 @observer
@@ -152,36 +153,65 @@ class ExplorePage extends React.Component {
         {
           isLoggedIn ? <LoginHome /> : <NoLoginHome />
         }
-        <h2 style={{ textAlign: "center", marginTop: "100px"}}>다른 사람의 Life</h2>
+        <h2 style={{ textAlign: "center", marginTop: "100px", fontStyle: "italic", color: "#343434", opacity: 0.8 }}>
+          Exploring Challenge
+        </h2>
+        <div style={{ width: "89px", height: "4px", backgroundColor: "#2f54eb", margin: "20px auto 130px", borderRadius: "2px" }}></div>
         <div
           className="ExplorePage-InfiniteScroll"
-          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "10px auto", width: "75%", justifyContent: "space-between", listStyle: "none", flexFlow: "row wrap", padding: "0" }}
+          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "auto", width: "90%", justifyContent: "flex-start", listStyle: "none", flexWrap: "wrap", padding: "0" }}
         >
           {
             this.state.items.length > 0 ? this.state.items.map((item, index) => (
               <Card
-                style={{ width: "360px", height: "360px", margin: "30px auto" }}
+                style={{ width: "275px", height: "275px", margin: "20px", boxShadow: "0 0 8px 3px rgba(217, 217, 217, 0.5)" }}
                 cover={<img alt="proof" src={JSON.parse(item.memo).t} />}
-              > 
-                <Button 
+              >
+                <div style={{ position: "absolute", top: "5%", color: "white", textShadow: "2px 2px 2px black" }}>
+                  { item.name }
+                </div>
+                <Button
                   style={{
-                    height: "90px", fontSize: "30px", position: "absolute", 
-                    top: "240px", left: "30px", width: "300px" 
+                    position: "absolute",
+                    top: "85%",
+                    backgroundColor: "transparent",
+                    borderStyle: "none",
+                    alignItems: "right",
+                    width: "90%",
+                    textAlign: "right",
+                    color: "white",
+                    textShadow: "2px 2px 2px black",
                   }}
                   onClick={() => this.onClickButton(index)}
                 >
-                  내역 보기
+                  More Detail
                 </Button>
               </Card>
             )) : <div>내역이 없습니다.</div>
           }
         </div>
-        <ProofCard 
+        <ProofCard
           handleOk={this.handleOk}
           handleCancel={this.handleCancel}
           visible={this.state.visible}
           proof={ this.state.items.length > this.state.index ? this.state.items[this.state.index] : null }
         />
+        <div style={{ width: "100%", height: "400px", backgroundImage: `url(${footerBackgroundImage})`, backgroundSize: "cover", marginTop: "100px", display: "grid", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ textAlign: "center", fontStyle: "italic", color: "#343434", fontSize: "24px", opacity: 0.8 }}>START NOW YOU CHALLANGE</div>
+          <div style={{ textAlign: "center", color: "#343434", fontSize: "18px", opacity: 0.8 }}>Create challenges and upload images every day! Randomly assigned judges certify. <br /> <br />Once the challenge is complete, it can be recorded forever.</div>
+          <div style={{ textAlign: "center"}}>
+            <Button
+              shape="round"
+              onClick={this.clickStart}
+              style={{
+                maxWidth: "412px", minWidth: "300px", width: "90%", color: "white", backgroundColor: "#2f54eb",
+                fontSize: "14px", marginTop: "30px", height: "40px", fontWeight: "lighter"
+              }}
+            >
+              NOW START
+            </Button>
+          </div>
+        </div>
       </div>
     );
   }
