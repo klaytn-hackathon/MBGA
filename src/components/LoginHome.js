@@ -79,20 +79,21 @@ class LoginHome extends Component {
     }
     return (
       <div style={{ justifyContent: "center",  display: "block" }}>
-        <div style={{ justifyContent: "center", alignItems: "center", height: "170px", display: "flex" }}>
-          <div style={{ textAlign: "center", fontSize: "30px", fontWeight: "lighter"}}>MyLife</div>
+        <div style={{ marginTop: "80px", width: "100%", textAlign: "center" }}>
+          <div style={{ textAlign: "center", marginTop: "100px", fontStyle: "italic", color: "#343434", fontSize: "24px", opacity: 0.8 }}>MY Challenge</div>
+          <div style={{ width: "89px", height: "4px", backgroundColor: "#2f54eb", margin: "20px auto 50px", borderRadius: "2px" }}></div>
         </div>
         {
           this.state.items.length > 0 ? this.state.items.map((item) => {
             return (
-              <div key={item.key} style={{ height: "232px", borderTop: "1px solid #979797", borderBottom: "1px solid #979797", marginBottom: "22px"}}>
+              <div key={item.key} style={{ height: "180px", marginBottom: "22px", boxShadow: "0 0 8px 3px rgba(217, 217, 217, 0.5)", marginRight: "10%", marginLeft: "10%"}}>
                 <Row type="flex" align="middle" justify="center" style={{ height: "100%" }}>
                   <Col span={12} style={{ maxWidth: "1400px", minWidth: "375px", alignItems: "center", display: "flex" }}>
                     <div style={{ float: "left", alignItems: "center" }}>
-                      <div style={{ fontSize: "30px", fontWeight: "lighter", color: "#343434"}}> 
+                      <div style={{ fontWeight: "lighter", color: "#343434", fontSize: "18px"}}> 
                         {item.info.name}
                       </div>
-                      <TimerComponent endDate={item.info.endDate} style={{ fontSize: "18px", fontWeight: "lighter", color: "#979797", marginTop: "42px"}} />
+                      <TimerComponent endDate={item.info.endDate} style={{ fontSize: "12px", fontWeight: "lighter", color: "#979797", marginTop: "42px"}} />
                     </div>
                   </Col>
                   <Col span={6} style={{alignItems: "center", display: "flex", justifyContent: "flex-end"}}>
@@ -113,7 +114,7 @@ class LoginHome extends Component {
             style={{marginTop: "20px", fontSize: "30px", fontWeight: "lighter", color:"#343434"}}
             onClick={this.createNewProject}
           >
-            <div style={{borderBottom: "1px solid #343434"}}>새로운 도전하기</div>
+            <div style={{ borderBottom: "1px solid #343434", fontSize: "12px", color: "#343434" }}>New Challenge</div>
             
           </Button>
         </div>

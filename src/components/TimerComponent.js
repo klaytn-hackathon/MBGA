@@ -47,7 +47,7 @@ class Timer extends Component {
     return(
       <div style={this.props.style}>
         {
-          this.state.time > 0 ? `남은 도전 기간 ${this.makeRemainStr(this.state.time)}` : "도전이 종료되었습니다." 
+          this.state.time > 0 ? `Rmain Period ${this.makeRemainStr(this.state.time)}` : "도전이 종료되었습니다." 
         }
       </div>
     );
