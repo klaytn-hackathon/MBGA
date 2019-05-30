@@ -6,7 +6,7 @@ import LoginHome from '../components/LoginHome';
 import cav from '../klaytn/caver';
 import contractJson from '../../build/contracts/DodoRepository.json';
 import ProofCard from '../components/ExploreProofCard';
-import footerBackgroundImage from '../static/challenge2.png'
+import footerBackgroundImage from '../static/challenge2.png';
 
 @inject('auth')
 @observer

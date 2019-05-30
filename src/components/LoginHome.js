@@ -114,8 +114,10 @@ class LoginHome extends Component {
                 </Row>
               </div>
             );
-          }) : <div>
-            No Data.
+          }) : <div style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "auto", 
+          width: "90%", justifyContent: "flex-start", listStyle: "none", flexWrap: "wrap", 
+          padding: "0", }}>
+            <div>No Data.</div>
           </div>
         }
         
