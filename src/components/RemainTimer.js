@@ -46,7 +46,7 @@ class RemainTimer extends Component {
     return(
       <div style={this.props.style}>
         {
-          this.state.time > 0 ? `Remain Time ${this.makeRemainStr(this.state.time)}` : "시간이 종료되었습니다." 
+          this.state.time > 0 ? `Remain Time ${this.makeRemainStr(this.state.time)}` : "Time Over" 
         }
       </div>
     );

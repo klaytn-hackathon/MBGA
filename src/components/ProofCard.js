@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Modal, Button } from 'antd';
+import RemainTimer from './RemainTimer';
 import cav from '../klaytn/caver';
 import contractJson from '../../build/contracts/DodoRepository.json';
 
@@ -38,7 +39,9 @@ class ProofCard extends Component {
     if(loading2 == void 0) loading2 = false;
     return (
       <Modal
-        title={ this.state.isReferee ? "Judge" : "Look" }
+        title={ <div style={{ justifyContent: "center", alignItems: "center" }}>
+          <RemainTimer timestamp={proof.timestamp} style={{ fontSize: "30px", fontWeight: "lighter", textAlign: "center" }}/> 
+        </div>}
         visible={visible}
         onOk={handleOk}
         onCancel={handleCancel}
