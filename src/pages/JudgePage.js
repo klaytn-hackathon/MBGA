@@ -21,6 +21,7 @@ class JudgePage extends Component {
   };
   itemList = [];
   overTime = false;
+  project = {};
 
   fetchMoreData = async () => {
     const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
@@ -32,6 +33,11 @@ class JudgePage extends Component {
     for (let i = this.itemList.length - 1 - judgeLength - finishedLength; i >= 0; i -= 1) {
       const item = await contract.methods.getProof(this.itemList[i] * 1).call();
       item.proofNo = this.itemList[i];
+      if(!this.project.hasOwnProperty(item.projectNo)) {
+        const info = await contract.methods.getProjectInfo(item.projectNo).call();
+        this.project[item.projectNo] = { title: info.name };
+      }
+
       if (!this.overTime) {
         const current = new Date().getTime();
         if (current < item.timestamp * 1000 + 2 * 24 * 3600 * 1000) {
@@ -190,6 +196,11 @@ class JudgePage extends Component {
     }
   }
 
+  handleTime = timestamp => {
+    const startDate = new Date(timestamp * 1000);
+    return `${startDate.getFullYear()}. ${startDate.getMonth() + 1}. ${startDate.getDate()}`;
+  }
+
   cancelReferee = async () => {
     const address = this.props.auth.values.address;
     try {
@@ -225,7 +236,7 @@ class JudgePage extends Component {
       return <NotJudgePage />;
     }
     const { Meta } = Card;
-    const { isLoggedIn } = this.props.auth.values;
+    const { isLoggedIn, address } = this.props.auth.values;
     return (
       <div style={{backgroundColor: "#ffffff", marginTop: "70px"}} >
         <div style={{ justifyContent: "center", display: "flex"}} >
@@ -236,93 +247,111 @@ class JudgePage extends Component {
             }}
           >
             <div style={{ textAlign: "left", fontSize: "30px", fontWeight: "lighter" }}>
-                나의 판정
+                My Judge
             </div>
             <Button 
-                type="link" 
-                ghost
-                style={{fontSize: "30px", fontWeight: "lighter", color:"#343434"}}
-                onClick={this.cancelReferee}
-              >
-              <div style={{borderBottom: "1px solid #343434"}}>판사 취소하기</div>
+              size="large"
+              style={{ width: "215px" }}
+              onClick={this.cancelReferee}
+            >
+              Cancel Judges
             </Button>
           </div>
         </div>
         <div
-          style={{ maxWidth: "1300px", minWidth: "375px", margin: "0px auto", width: "75%" }}
+          style={{ maxWidth: "1300px", minWidth: "375px", margin: "0px auto", width: "75%", justifyContent: "center" }}
         >
-          <h2 style={{ textAlign: "left", marginTop: "150px", fontSize: "30px", fontWeight: "lighter" }}>
-            확인해야 할 인증
+          <h2 style={{ textAlign: "center", marginTop: "100px", fontStyle: "italic", color: "#343434", opacity: 0.8 }}>
+            Check Proof
           </h2>
+          <div style={{ width: "89px", height: "4px", backgroundColor: "#5c5c5d", margin: "20px auto 130px", borderRadius: "2px" }}></div>
         </div>
         <div
-          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "10px auto", width: "75%", justifyContent: "space-between", listStyle: "none", flexFlow: "row wrap", padding: "0" }}
+          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "auto", 
+          width: "90%", justifyContent: "flex-start", listStyle: "none", flexWrap: "wrap", 
+          padding: "0", }}
         >
           {
             this.state.judgeItems.length > 0 ? this.state.judgeItems.map((item, index) => (
               <Card
-                style={{ width: "360px", height: "360px", margin: "30px auto" }}
+                style={{ width: "275px", height: "275px", margin: "20px", boxShadow: "0 0 8px 3px rgba(217, 217, 217, 0.5)" }}
                 cover={<img alt="proof" src={JSON.parse(item.memo).t} />}
               > 
-                <div
-                  style={{
-                    height: "36px", fontSize: "30px", position: "absolute", fontWeight: "lighter",
-                    top: "85px", left: "30px", width: "300px", textAlign: "center", color: "#f0f0f0" 
-                  }}
-                >
-                  남은 시간
+                <div style={{ position: "absolute", top: "5%", color: "white", textShadow: "2px 2px 2px black" }}>
+                  { this.project[item.projectNo].title }
                 </div>
                 <RemainTimer
-                  style={{
-                    height: "21px", fontSize: "18px", position: "absolute", fontWeight: "lighter",
-                    top: "150px", left: "30px", width: "300px", textAlign: "center", color: "#f0f0f0",
-                    justifyContent: "center",  
-                  }}
+                  style={{ position: "absolute", top: "87.8%", color: "white", textShadow: "2px 2px 2px black", fontSize: "12px" }}
                   timestamp={item.timestamp * 1}
                 />
-                <Button 
+                <Button
                   style={{
-                    height: "90px", fontSize: "30px", position: "absolute", 
-                    top: "240px", left: "30px", width: "300px" 
+                    position: "absolute",
+                    top: "85%",
+                    backgroundColor: "transparent",
+                    borderStyle: "none",
+                    alignItems: "right",
+                    width: "90%",
+                    textAlign: "right",
+                    color: "white",
+                    textShadow: "2px 2px 2px black",
                   }}
                   onClick={() => this.onClickButton(item, false)}
                 >
-                  확인하기
+                  More Detail
                 </Button>
               </Card>
-            )) : <div>내역이 없습니다.</div>
+            )) : <div>No data.</div>
           }
         </div>
         <div
-          style={{ maxWidth: "1300px", minWidth: "375px", margin: "0px auto", width: "75%" }}
+          style={{ maxWidth: "1300px", minWidth: "375px", margin: "0px auto", width: "75%", justifyContent: "center" }}
         >
-          <h2 style={{ textAlign: "left", marginTop: "150px", fontSize: "30px", fontWeight: "lighter"}}>
-            이미 종료한 인증
+          <h2 style={{ textAlign: "center", marginTop: "100px", fontStyle: "italic", color: "#343434", opacity: 0.8 }}>
+            Closed Proof
           </h2>
+          <div style={{ width: "89px", height: "4px", backgroundColor: "#5c5c5d", margin: "20px auto 130px", borderRadius: "2px" }}></div>
         </div>
         <div
           className="ExplorePage-InfiniteScroll"
-          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "10px auto", width: "75%", justifyContent: "space-between", listStyle: "none", flexFlow: "row wrap", padding: "0" }}
+          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "auto", 
+            width: "90%", justifyContent: "flex-start", listStyle: "none", flexWrap: "wrap", 
+            padding: "0", }}
         >
           {
             this.state.finishedItems.length > 0 ? this.state.finishedItems.map((item, index) => (
               <Card
-                style={{ width: "360px", height: "360px", margin: "30px auto" }}
+                style={{ width: "275px", height: "275px", margin: "20px", boxShadow: "0 0 8px 3px rgba(217, 217, 217, 0.5)" }}
                 cover={<img alt="proof" src={JSON.parse(item.memo).t} />}
               >
-                <div 
-                  style={{  
-                    height: "21px", fontSize: "18px", position: "absolute", fontWeight: "lighter",
-                    top: "274px", left: "30px", width: "300px", textAlign: "center", 
-                  }}
-                >
-                  { 
-                    item.like.includes(this.props.auth.values.address) ? "Proof Success" 
-                    : item.dislike.includes(this.props.auth.values.address) ? "Proof Fail" : "Time Out"
-                  }
+                <div style={{ position: "absolute", top: "5%", color: "white", textShadow: "2px 2px 2px black" }}>
+                  { this.project[item.projectNo].title }
                 </div>
+                <div style={{ position: "absolute", top: "75%", color: "white", textShadow: "2px 2px 2px black" }}>
+                  { this.handleTime(item.timestamp) }
+                </div>
+                <Button
+                  style={{
+                    position: "absolute",
+                    top: "85%",
+                    backgroundColor: "#fafafa",
+                    borderStyle: "none",
+                    alignItems: "center",
+                    textAlign: "center",
+                    color: item.like.includes(address) ? "#2f54eb" :
+                          item.dislike.includes(address) ? "#eb2f2f" : "#404040", 
+                    height: "22px",
+                    fontSize: "12px"
+                  }}
+                  onClick={() => this.onClickButton(item, true)}
+                >
+                  {
+                    item.like.includes(address) ? "Success" :
+                    item.dislike.includes(address) ? "Fail" : "Timeout" 
+                  }
+                </Button>
               </Card>
-            )) : <div>내역이 없습니다.</div>
+            )) : <div>No data.</div>
           }
         </div>
         <ProofCard 

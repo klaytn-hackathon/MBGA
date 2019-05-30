@@ -53,6 +53,7 @@ class InputDatePage extends Component {
         value: cav.utils.toPeb(this.props.contract.betAmount),
       });
     
+      console.log(gasAmount);
       contract.methods.createProject(this.props.contract.projectName,
         "",
         this.props.contract.startTime,
@@ -85,7 +86,6 @@ class InputDatePage extends Component {
   }
 
   handleCancel = e => {
-    console.log(1)
     this.setState({
       visible: false,
     });

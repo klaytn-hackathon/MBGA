@@ -103,6 +103,15 @@ class ExplorePage extends React.Component {
     }
   }
 
+  clickStart = () => {
+    const { isLoggedIn } = this.props.auth.values;
+    if(isLoggedIn) {
+      this.props.auth.openPage("4");
+    } else {
+      this.showModal();
+    }
+  }
+  
   handleCancel = async e => {
     if(e.target.className === "ant-btn ant-btn-danger") {
       const like = this.state.items[this.state.index].like;
@@ -155,7 +164,7 @@ class ExplorePage extends React.Component {
     const { Meta } = Card;
     const { isLoggedIn } = this.props.auth.values;
     return (
-      <div style={{backgroundColor: "#ffffff"}}>
+      <div style={{backgroundColor: "#fffff"}}>
         {
           isLoggedIn ? <LoginHome /> : <NoLoginHome />
         }
@@ -165,7 +174,9 @@ class ExplorePage extends React.Component {
         <div style={{ width: "89px", height: "4px", backgroundColor: "#2f54eb", margin: "20px auto 130px", borderRadius: "2px" }}></div>
         <div
           className="ExplorePage-InfiniteScroll"
-          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "auto", width: "90%", justifyContent: "flex-start", listStyle: "none", flexWrap: "wrap", padding: "0" }}
+          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "auto", 
+            width: "90%", justifyContent: "flex-start", listStyle: "none", flexWrap: "wrap", 
+            padding: "0", }}
         >
           {
             this.state.items.length > 0 ? this.state.items.map((item, index) => (

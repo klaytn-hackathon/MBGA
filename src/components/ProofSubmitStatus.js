@@ -131,7 +131,7 @@ class ProofSubmitStatus extends Component {
         return (
           <div style={{ fontSize: "30px", fontWeight: "lighter", color: "#343434" }}>
             <Button
-              style={{ width: "130px", height: "40px", fontSize: "14px", fontWeight: "lighter", backgroundColor: "#ffffff", color: "blue" }}
+              style={{ width: "130px", height: "40px", fontSize: "14px", fontWeight: "lighter", backgroundColor: "#ffffff", color: "#2f54eb" }}
               disabled
               type="dashed"
             >
@@ -143,7 +143,7 @@ class ProofSubmitStatus extends Component {
         return (
           <div style={{ fontSize: "30px", fontWeight: "lighter", color: "#343434" }}>
             <Button
-              style={{ width: "130px", height: "40px", fontSize: "14px", fontWeight: "lighter", backgroundColor: "#ffffff", color: "red" }}
+              style={{ width: "130px", height: "40px", fontSize: "14px", fontWeight: "lighter", backgroundColor: "#ffffff", color: "#eb2f2f" }}
               disabled
               type="dashed"
             >

@@ -33,7 +33,8 @@ class MyPage extends React.Component {
       proof.startDate = this.project[proof.projectNo].info.startDate;
       proof.endDate = this.project[proof.projectNo].info.endDate;
       const refereeList = this.project[proof.projectNo].referees;
-      if(new Date().getTime() / 1000 > proof.timestamp + 48 * 3600) {
+
+      if(new Date().getTime() / 1000 > proof.timestamp * 1 + 48 * 3600) {
         if(proof.judged === 129) {
           proof.status = false;
         } else if(proof.judged === 128) {
@@ -46,7 +47,7 @@ class MyPage extends React.Component {
             if(proof.dislike.includes[refereeList[i]]) failCount += 1;
             if(successCount >= 2) proof.status = true;
             else if(failCount >= 2) proof.status = false;
-            else if(proof.like.length + 5 * (successCount - failCount) + 5 >= proof.dislike.count) {
+            else if(proof.like.length + 5 * (successCount - failCount) + 5 >= proof.dislike.length) {
               proof.status = true;
             } else {
               proof.status = false;
@@ -183,11 +184,9 @@ class MyPage extends React.Component {
     }
   }
 
-  handleTime = proof => {
-    const startDate = new Date(proof.startDate * 1000);
-    const endDate = new Date(proof.endDate * 1000 - 24 * 3600);
-    return <div>{startDate.getFullYear()}. {startDate.getMonth() + 1}. {startDate.getDate()}<br />
-      ~ {endDate.getFullYear()}. {endDate.getMonth() + 1}. {endDate.getDate()}</div>;
+  handleTime = timestamp => {
+    const startDate = new Date(timestamp * 1000);
+    return `${startDate.getFullYear()}. ${startDate.getMonth() + 1}. ${startDate.getDate()}`;
   }
 
   render() {
@@ -196,49 +195,50 @@ class MyPage extends React.Component {
     return (
       <div style={{backgroundColor: "#ffffff"}}>
         <LoginHome fromPage="my" />
-        <h2 style={{ textAlign: "center", marginTop: "100px"}}>나의 종료된 도전</h2>
+        <div style={{ marginTop: "80px", width: "100%", textAlign: "center" }}>
+          <div style={{ textAlign: "center", marginTop: "100px", fontStyle: "italic", color: "#343434", fontSize: "24px", opacity: 0.8 }}>MY terminated Challenge</div>
+          <div style={{ width: "89px", height: "4px", backgroundColor: "#2f54eb", margin: "20px auto 50px", borderRadius: "2px" }}></div>
+        </div>
         <div
           className="ExplorePage-InfiniteScroll"
-          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "10px auto", width: "75%", justifyContent: "space-between", listStyle: "none", flexFlow: "row wrap", padding: "0" }}
+          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "auto", 
+            width: "90%", justifyContent: "flex-start", listStyle: "none", flexWrap: "wrap", 
+            padding: "0", }}
         >
           {
             this.state.items.length > 0 ? this.state.items.map((item, index) => (
               <Card
-                style={{ width: "360px", height: "360px", margin: "30px auto" }}
+                style={{ width: "275px", height: "275px", margin: "20px", boxShadow: "0 0 8px 3px rgba(217, 217, 217, 0.5)" }}
                 cover={<img alt="proof" src={JSON.parse(item.memo).t} />}
-              > 
-                <div 
+              >
+                <div style={{ position: "absolute", top: "5%", color: "white", textShadow: "2px 2px 2px black" }}>
+                  { this.project[item.projectNo].title }
+                </div>
+                <div style={{ position: "absolute", top: "75%", color: "white", textShadow: "2px 2px 2px black" }}>
+                  { this.handleTime(item.timestamp) }
+                </div>
+                <Button
                   style={{
-                    fontSize: "48px", position: "absolute", color: "#343434",
-                    top: "30px", left: "24px", width: "312px", fontWeight: "lighter" 
+                    position: "absolute",
+                    top: "85%",
+                    backgroundColor: "#fafafa",
+                    borderStyle: "none",
+                    alignItems: "center",
+                    textAlign: "center",
+                    color: item.status === true ? "#2f54eb" :
+                          item.status === false ? "#eb2f2f" : "#404040", 
+                    height: "22px",
+                    fontSize: "12px"
                   }}
+                  onClick={() => this.onClickButton(index)}
                 >
                   {
-                    item.status == void 0 ? "인증 중" : item.status ? "성공" : "실패"
+                    item.status === true ? "Success" :
+                    item.status === false ? "Fail" : "Waiting" 
                   }
-                </div>
-                <div 
-                  style={{
-                    fontSize: "30px", position: "absolute", color: "#343434",
-                    top: "115px", left: "24px", width: "312px", fontWeight: "lighter"
-                  }}
-                >
-                  { item.title }
-                </div>
-                <div 
-                  style={{
-                    height: "205px", fontSize: "30px", position: "absolute", color: "#343434",
-                    top: "240px", left: "24px", width: "312px", fontWeight: "lighter" 
-                  }}
-                >
-                  {
-                    this.handleTime(item)
-                  }
-                </div>
+                </Button>
               </Card>
-            )) : <div>
-              내역이 없습니다.
-            </div>
+            )) : <div>No Data.</div>
           }
         </div>
         <ProofCard 
