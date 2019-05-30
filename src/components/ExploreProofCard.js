@@ -45,7 +45,7 @@ class ProofCard extends Component {
         footer={
           <div style={{display: "flex", justifyContent: "flex-end"}}>
             <Button key="submit" type="primary" loading={loading2} onClick={handleOk} 
-              style={{ width: "50%" }} disabled={disable2} shape="round"
+              style={{ width: "50%", minWidth: "300px" }} disabled={disable2} shape="round"
             >
               Report Invalid Photo 
             </Button>
