@@ -195,51 +195,58 @@ class MyPage extends React.Component {
     return (
       <div style={{backgroundColor: "#ffffff"}}>
         <LoginHome fromPage="my" />
-        <div style={{ marginTop: "80px", width: "100%", textAlign: "center" }}>
-          <div style={{ textAlign: "center", marginTop: "100px", fontStyle: "italic", color: "#343434", fontSize: "24px", opacity: 0.8 }}>MY terminated Challenge</div>
-          <div style={{ width: "89px", height: "4px", backgroundColor: "#2f54eb", margin: "20px auto 50px", borderRadius: "2px" }}></div>
-        </div>
         <div
-          className="ExplorePage-InfiniteScroll"
-          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "auto", 
-            width: "90%", justifyContent: "flex-start", listStyle: "none", flexWrap: "wrap", 
-            padding: "0", }}
+          style= {{
+            width: "100%", backgroundColor: "#f9f9f9", paddingTop: "118px", paddingBottom: "118px",
+            boxShadow: "0 0 2px 1px rgba(217, 217, 217, 0.5)"
+          }}
         >
-          {
-            this.state.items.length > 0 ? this.state.items.map((item, index) => (
-              <Card
-                style={{ width: "275px", height: "275px", margin: "20px", boxShadow: "0 0 8px 3px rgba(217, 217, 217, 0.5)" }}
-                cover={<img alt="proof" src={JSON.parse(item.memo).t} />}
-              >
-                <div style={{ position: "absolute", top: "5%", color: "white", textShadow: "2px 2px 2px black" }}>
-                  { this.project[item.projectNo].title }
-                </div>
-                <div style={{ position: "absolute", top: "75%", color: "white", textShadow: "2px 2px 2px black" }}>
-                  { this.handleTime(item.timestamp) }
-                </div>
-                <Button
-                  style={{
-                    position: "absolute",
-                    top: "85%",
-                    backgroundColor: "#fafafa",
-                    borderStyle: "none",
-                    alignItems: "center",
-                    textAlign: "center",
-                    color: item.status === true ? "#2f54eb" :
-                          item.status === false ? "#eb2f2f" : "#404040", 
-                    height: "22px",
-                    fontSize: "12px"
-                  }}
-                  onClick={() => this.onClickButton(index)}
+          <div style={{ width: "100%", textAlign: "center" }}>
+            <div style={{ textAlign: "center", fontStyle: "italic", color: "#343434", fontSize: "24px", opacity: 0.8 }}>MY terminated Challenge</div>
+            <div style={{ width: "89px", height: "4px", backgroundColor: "#2f54eb", margin: "20px auto 50px", borderRadius: "2px" }}></div>
+          </div>
+          <div
+            className="ExplorePage-InfiniteScroll"
+            style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "auto", 
+              width: "90%", justifyContent: "flex-start", listStyle: "none", flexWrap: "wrap", 
+              padding: "0", }}
+          >
+            {
+              this.state.items.length > 0 ? this.state.items.map((item, index) => (
+                <Card
+                  style={{ width: "275px", height: "275px", margin: "20px", boxShadow: "0 0 8px 3px rgba(217, 217, 217, 0.5)" }}
+                  cover={<img alt="proof" src={JSON.parse(item.memo).t} />}
                 >
-                  {
-                    item.status === true ? "Success" :
-                    item.status === false ? "Fail" : "Waiting" 
-                  }
-                </Button>
-              </Card>
-            )) : <div>No Data.</div>
-          }
+                  <div style={{ position: "absolute", top: "5%", color: "white", textShadow: "2px 2px 2px black" }}>
+                    { this.project[item.projectNo].title }
+                  </div>
+                  <div style={{ position: "absolute", top: "75%", color: "white", textShadow: "2px 2px 2px black" }}>
+                    { this.handleTime(item.timestamp) }
+                  </div>
+                  <Button
+                    style={{
+                      position: "absolute",
+                      top: "85%",
+                      backgroundColor: "#fafafa",
+                      borderStyle: "none",
+                      alignItems: "center",
+                      textAlign: "center",
+                      color: item.status === true ? "#2f54eb" :
+                            item.status === false ? "#eb2f2f" : "#404040", 
+                      height: "22px",
+                      fontSize: "12px"
+                    }}
+                    onClick={() => this.onClickButton(index)}
+                  >
+                    {
+                      item.status === true ? "Success" :
+                      item.status === false ? "Fail" : "Waiting" 
+                    }
+                  </Button>
+                </Card>
+              )) : <div>No Data.</div>
+            }
+          </div>
         </div>
         <ProofCard 
           handleOk={this.handleOk}

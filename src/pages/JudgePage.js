@@ -238,8 +238,8 @@ class JudgePage extends Component {
     const { Meta } = Card;
     const { isLoggedIn, address } = this.props.auth.values;
     return (
-      <div style={{backgroundColor: "#ffffff", marginTop: "70px"}} >
-        <div style={{ justifyContent: "center", display: "flex"}} >
+      <div style={{ backgroundColor: "#ffffff" }} >
+        <div style={{ justifyContent: "center", display: "flex", alignItems: "center", height: "215px"}} >
           <div
             style={{ 
               maxWidth: "1300px", minWidth: "375px", margin: "0px auto", width: "75%", 
@@ -259,58 +259,65 @@ class JudgePage extends Component {
           </div>
         </div>
         <div
-          style={{ maxWidth: "1300px", minWidth: "375px", margin: "0px auto", width: "75%", justifyContent: "center" }}
+          style= {{
+            width: "100%", backgroundColor: "#f9f9f9", paddingTop: "42px", paddingBottom: "72px",
+            boxShadow: "0 0 2px 1px rgba(217, 217, 217, 0.5)"
+          }}
         >
-          <h2 style={{ textAlign: "center", marginTop: "100px", fontStyle: "italic", color: "#343434", opacity: 0.8 }}>
-            Check Proof
-          </h2>
-          <div style={{ width: "89px", height: "4px", backgroundColor: "#5c5c5d", margin: "20px auto 130px", borderRadius: "2px" }}></div>
+          <div
+            style={{ maxWidth: "1300px", minWidth: "375px", margin: "0px auto", width: "75%", justifyContent: "center" }}
+          >
+            <h2 style={{ textAlign: "center", fontStyle: "italic", color: "#343434", opacity: 0.8 }}>
+              Check Proof
+            </h2>
+            <div style={{ width: "89px", height: "4px", backgroundColor: "#5c5c5d", margin: "20px auto 130px", borderRadius: "2px" }}></div>
+          </div>
+          <div
+            style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "auto", 
+            width: "90%", justifyContent: "flex-start", listStyle: "none", flexWrap: "wrap", 
+            padding: "0", }}
+          >
+            {
+              this.state.judgeItems.length > 0 ? this.state.judgeItems.map((item, index) => (
+                <Card
+                  style={{ width: "275px", height: "275px", margin: "20px", boxShadow: "0 0 8px 3px rgba(217, 217, 217, 0.5)" }}
+                  cover={<img alt="proof" src={JSON.parse(item.memo).t} />}
+                > 
+                  <div style={{ position: "absolute", top: "5%", color: "white", textShadow: "2px 2px 2px black" }}>
+                    { this.project[item.projectNo].title }
+                  </div>
+                  <RemainTimer
+                    style={{ position: "absolute", top: "87.8%", color: "white", textShadow: "2px 2px 2px black", fontSize: "12px" }}
+                    timestamp={item.timestamp * 1}
+                  />
+                  <Button
+                    style={{
+                      position: "absolute",
+                      top: "85%",
+                      backgroundColor: "transparent",
+                      borderStyle: "none",
+                      alignItems: "right",
+                      width: "90%",
+                      textAlign: "right",
+                      color: "white",
+                      textShadow: "2px 2px 2px black",
+                    }}
+                    onClick={() => this.onClickButton(item, false)}
+                  >
+                    More Detail
+                  </Button>
+                </Card>
+              )) : <div>No data.</div>
+            }
+          </div>
         </div>
         <div
-          style={{ display: "flex", maxWidth: "1300px", minWidth: "375px", margin: "auto", 
-          width: "90%", justifyContent: "flex-start", listStyle: "none", flexWrap: "wrap", 
-          padding: "0", }}
-        >
-          {
-            this.state.judgeItems.length > 0 ? this.state.judgeItems.map((item, index) => (
-              <Card
-                style={{ width: "275px", height: "275px", margin: "20px", boxShadow: "0 0 8px 3px rgba(217, 217, 217, 0.5)" }}
-                cover={<img alt="proof" src={JSON.parse(item.memo).t} />}
-              > 
-                <div style={{ position: "absolute", top: "5%", color: "white", textShadow: "2px 2px 2px black" }}>
-                  { this.project[item.projectNo].title }
-                </div>
-                <RemainTimer
-                  style={{ position: "absolute", top: "87.8%", color: "white", textShadow: "2px 2px 2px black", fontSize: "12px" }}
-                  timestamp={item.timestamp * 1}
-                />
-                <Button
-                  style={{
-                    position: "absolute",
-                    top: "85%",
-                    backgroundColor: "transparent",
-                    borderStyle: "none",
-                    alignItems: "right",
-                    width: "90%",
-                    textAlign: "right",
-                    color: "white",
-                    textShadow: "2px 2px 2px black",
-                  }}
-                  onClick={() => this.onClickButton(item, false)}
-                >
-                  More Detail
-                </Button>
-              </Card>
-            )) : <div>No data.</div>
-          }
-        </div>
-        <div
           style={{ maxWidth: "1300px", minWidth: "375px", margin: "0px auto", width: "75%", justifyContent: "center" }}
         >
-          <h2 style={{ textAlign: "center", marginTop: "100px", fontStyle: "italic", color: "#343434", opacity: 0.8 }}>
+          <h2 style={{ textAlign: "center", marginTop: "76px", fontStyle: "italic", color: "#343434", opacity: 0.8 }}>
             Closed Proof
           </h2>
-          <div style={{ width: "89px", height: "4px", backgroundColor: "#5c5c5d", margin: "20px auto 130px", borderRadius: "2px" }}></div>
+          <div style={{ width: "89px", height: "4px", backgroundColor: "#2f54eb", margin: "20px auto 130px", borderRadius: "2px" }}></div>
         </div>
         <div
           className="ExplorePage-InfiniteScroll"

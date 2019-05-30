@@ -10,7 +10,7 @@ class ProofSubmitStatus extends Component {
   
   constructor(props) {
     super(props);
-    this.state = { visible: false, title: "", imageUrl: "", thumbUrl: "" };
+    this.state = { visible: false, title: "", imageUrl: "", thumbUrl: "", proceeding: false };
   }
 
   openModal = () => {
@@ -44,42 +44,57 @@ class ProofSubmitStatus extends Component {
 
   handleOk = async e => {
     if(this.state.title.length * this.state.imageUrl.length * this.state.thumbUrl.length !== 0) {
-      const data = {
-        i: this.state.imageUrl, t: this.state.thumbUrl,
-      }
-      const memo = JSON.stringify(data);
-      const projectNo = this.props.projectNo * 1;
-      const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
-      const gasAmount = await contract.methods.submitProof(projectNo,
-        this.state.title,
-        memo
-      ).estimateGas({ 
-        from: this.props.auth.values.address,
+      this.setState({
+        proceeding: true
       });
-
-      contract.methods.submitProof(projectNo,
-        this.state.title,
-        memo
-      ).send({ 
-        from: this.props.auth.values.address,
-        gas: gasAmount
-      }).on('transactionHash', (hash) => {
-        console.log(hash);
-      })
-      .on('receipt', (receipt) => {
-        console.log(receipt);
-        this.setState({
-          visible: false,
-          title: "",
-          imageUrl: "",
-          thumbUrl: "",
+      try {
+        const data = {
+          i: this.state.imageUrl, t: this.state.thumbUrl,
+        }
+        const memo = JSON.stringify(data);
+        const projectNo = this.props.projectNo * 1;
+        const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
+        const gasAmount = await contract.methods.submitProof(projectNo,
+          this.state.title,
+          memo
+        ).estimateGas({ 
+          from: this.props.auth.values.address,
         });
-        this.props.auth.openPage("2");
-        this.props.auth.openPage("1");
-      })
-      .on('error', err => {
-        alert(err.message);
-      });
+
+        contract.methods.submitProof(projectNo,
+          this.state.title,
+          memo
+        ).send({ 
+          from: this.props.auth.values.address,
+          gas: gasAmount
+        }).on('transactionHash', (hash) => {
+          console.log(hash);
+        })
+        .on('receipt', (receipt) => {
+          console.log(receipt);
+          this.setState({
+            visible: false,
+            title: "",
+            imageUrl: "",
+            thumbUrl: "",
+            proceeding: false,
+          });
+          this.props.auth.openPage("2");
+          this.props.auth.openPage("1");
+        })
+        .on('error', err => {
+          alert(err.message);
+          this.setState({
+            proceeding: false,
+          });
+        });
+      } catch (e) {
+        this.setState({
+          proceeding: false,
+        });
+        alert(e.message);
+        return;
+      }
     } else {
       alert("You should upload image or write title");
     }
@@ -233,6 +248,7 @@ class ProofSubmitStatus extends Component {
           onCancel={this.handleCancel}
           okText="Submit"
           cancelText="Cancel"
+          okButtonProps={{ loading: this.state.proceeding }}
         >
           <Upload
             name="image"

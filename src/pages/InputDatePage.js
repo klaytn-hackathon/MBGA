@@ -76,11 +76,13 @@ class InputDatePage extends Component {
       .on('error', err => {
         alert(err.message);
         this.setState({
-          visible: false,
           loading: false,
         });
       });
     } catch (e) {
+      this.setState({
+        loading: false,
+      });
       return;
     }
   }

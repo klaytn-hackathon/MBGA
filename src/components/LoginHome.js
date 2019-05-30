@@ -90,7 +90,7 @@ class LoginHome extends Component {
       return <NoLoginHome />;
     }
     return (
-      <div style={{ justifyContent: "center",  display: "block" }}>
+      <div style={{ justifyContent: "center",  display: "block", paddingBottom: "75px" }}>
         <div style={{ marginTop: "80px", width: "100%", textAlign: "center" }}>
           <div style={{ textAlign: "center", marginTop: "100px", fontStyle: "italic", color: "#343434", fontSize: "24px", opacity: 0.8 }}>MY Challenge</div>
           <div style={{ width: "89px", height: "4px", backgroundColor: "#2f54eb", margin: "20px auto 50px", borderRadius: "2px" }}></div>
