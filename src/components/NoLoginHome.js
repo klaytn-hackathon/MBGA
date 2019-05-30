@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { observer, inject } from 'mobx-react';
 import { Button, Modal, Input } from 'antd';
+import mainLogoImage from '../static/main_logo.png';
 
 @inject('auth', 'contract')
 @observer
@@ -49,19 +50,22 @@ class NoLoginHome extends Component {
     const { isLoggedIn } = values;
     return (
       <div style={{backgroundColor: "#2f54eb", height: "620px", justifyContent: "center" }}>
-        <div style={{ justifyContent: "center", alignItems: "center", display: "block", textAlign: "center", paddingTop: "300px"}}>
-          <h2 style={{color: "#ffffff", fontWeight: "lighter"}}>
-            당신의 삶을 다시 한번 Build-up 해보세요.
-          </h2>
+        <div style={{ justifyContent: "center", alignItems: "center", display: "block", textAlign: "center", paddingTop: "30px"}}>
+          <div style={{ marginBottom: "80px" }}>
+            <img src={mainLogoImage} alt="" />
+          </div>
+          <div style={{color: "#ffffff", fontSize: "24px"}}>
+            Build Up & Success YOUR CHALLENGE
+          </div>
           <Button 
             shape="round" 
             onClick={this.clickStart} 
             style={{ 
               maxWidth: "412px", minWidth: "300px", width: "90%", color: "#2f54eb", 
-              fontSize: "16px", marginTop: "90px", height: "48px" 
+              fontSize: "16px", marginTop: "30px", height: "48px", fontWeight: "lighter"
             }}
           >
-            시작하기
+            NOW START
           </Button>
         </div>
         <Modal
