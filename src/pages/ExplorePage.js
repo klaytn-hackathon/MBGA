@@ -229,7 +229,7 @@ class ExplorePage extends React.Component {
           proof={ this.state.items.length > this.state.index ? this.state.items[this.state.index] : null }
         />
         <div style={{ width: "100%", height: "400px", backgroundImage: `url(${footerBackgroundImage})`, backgroundSize: "cover", display: "grid", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ textAlign: "center", fontStyle: "italic", color: "#343434", fontSize: "24px", opacity: 0.8 }}>START NOW YOUR CHALLANGE</div>
+          <div style={{ textAlign: "center", fontStyle: "italic", color: "#343434", fontSize: "24px", opacity: 0.8 }}>START YOUR CHALLANGE NOW</div>
           <div style={{ textAlign: "center", color: "#343434", fontSize: "18px", opacity: 0.8 }}>Create challenges and upload images every day! Randomly assigned judges certify. <br /> <br />Once the challenge is complete, it can be recorded forever.</div>
           <div style={{ textAlign: "center"}}>
             <Button
