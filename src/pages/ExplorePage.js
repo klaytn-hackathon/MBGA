@@ -17,6 +17,7 @@ class ExplorePage extends React.Component {
     visible: false,
   };
   proofCount = 0;
+  project = {};
 
   fetchMoreData = async () => {
     const contract = new cav.klay.Contract(contractJson.abi, contractJson.networks["1001"].address);
@@ -24,9 +25,14 @@ class ExplorePage extends React.Component {
     for(let i = this.proofCount - 1 - this.state.items.length; i >= 0; i -= 1) {
       const proof = await contract.methods.getProof(i).call();
       proof.proofNo = i;
+      if(!this.project.hasOwnProperty(proof.projectNo)) {
+        const info = await contract.methods.getProjectInfo(proof.projectNo).call();
+        this.project[proof.projectNo] = { title: info.name };
+      }
+
       newProofs.push(proof);
       // console.log(proof);
-      if(newProofs.length === 6) break;
+      if(newProofs.length === 12) break;
     }
     if(newProofs.length === 0) return;
     this.setState({
@@ -168,7 +174,7 @@ class ExplorePage extends React.Component {
                 cover={<img alt="proof" src={JSON.parse(item.memo).t} />}
               >
                 <div style={{ position: "absolute", top: "5%", color: "white", textShadow: "2px 2px 2px black" }}>
-                  { item.name }
+                  { this.project[item.projectNo].title }
                 </div>
                 <Button
                   style={{
