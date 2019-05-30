@@ -40,14 +40,14 @@ class Timer extends Component {
     if(sec < 10) {
       secStr = `0${sec}`;
     }
-    return `${day}일 ${hourStr}:${minStr}:${secStr}`
+    return `${day} Day ${hourStr}:${minStr}:${secStr}`
   }
 
   render() {
     return(
       <div style={this.props.style}>
         {
-          this.state.time > 0 ? `Rmain Period ${this.makeRemainStr(this.state.time)}` : "도전이 종료되었습니다." 
+          this.state.time > 0 ? `Rmain Period ${this.makeRemainStr(this.state.time)}` : "Time Over" 
         }
       </div>
     );

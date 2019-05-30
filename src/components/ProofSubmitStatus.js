@@ -130,18 +130,26 @@ class ProofSubmitStatus extends Component {
       if(this.props.status.success === true) {
         return (
           <div style={{ fontSize: "30px", fontWeight: "lighter", color: "#343434" }}>
-            <div style={{ marginRight: "15px", borderBottom: "1px solid #343434" }}>
-              도전 성공
-            </div>
+            <Button
+              style={{ width: "130px", height: "40px", fontSize: "14px", fontWeight: "lighter", backgroundColor: "#ffffff", color: "blue" }}
+              disabled
+              type="dashed"
+            >
+              Success
+            </Button>
           </div>  
         );
       } else {
         return (
           <div style={{ fontSize: "30px", fontWeight: "lighter", color: "#343434" }}>
-            <div style={{ marginRight: "15px", borderBottom: "1px solid #343434" }}>
-              도전 실패
-            </div>
-          </div>  
+            <Button
+              style={{ width: "130px", height: "40px", fontSize: "14px", fontWeight: "lighter", backgroundColor: "#ffffff", color: "red" }}
+              disabled
+              type="dashed"
+            >
+              Fail
+            </Button>
+          </div>    
         );
       }
     }
@@ -150,10 +158,10 @@ class ProofSubmitStatus extends Component {
       return (
         <div>
           <Button
-            style={{ width: "255px", height: "98px", fontSize: "36px", fontWeight: "lighter" }}
+            style={{ width: "130px", height: "40px", fontSize: "14px", fontWeight: "lighter", color: "white", backgroundColor: "#1890ff" }}
             onClick={this.submitFinalize}
           >
-            정산하기
+            Finalize
           </Button>
         </div>
       );
@@ -161,21 +169,48 @@ class ProofSubmitStatus extends Component {
     if(date > this.props.info.endDate * 1) {
       return (
         <div style={{ fontSize: "30px", fontWeight: "lighter", color: "#343434" }}>
-          <div style={{ marginRight: "15px", borderBottom: "1px solid #343434"}}>
-            심사 중
-          </div>
+          <Button
+            style={{ width: "130px", height: "40px", fontSize: "14px", fontWeight: "lighter", backgroundColor: "#ffffff", color: "#343434" }}
+            disabled
+            type="dashed"
+          >
+            Waiting
+          </Button>
         </div>  
       );
     }
     if(date < this.props.info.startDate * 1) {
       return (
         <div style={{ fontSize: "30px", fontWeight: "lighter", color: "#343434" }}>
-          <div style={{ marginRight: "15px", borderBottom: "1px solid #343434" }}>
-            시작 전
-          </div>
+          <Button
+            style={{ width: "130px", height: "40px", fontSize: "14px", fontWeight: "lighter", backgroundColor: "#ffffff", color: "#343434" }}
+            disabled
+            type="dashed"
+          >
+            Waiting
+          </Button>
+        </div>   
+      );
+    }
+    const today = new Date();
+    const timestampDate = new Date(this.props.timestamp * 1000);
+
+    if(today.getYear() === timestampDate.getYear() 
+      && today.getMonth() === timestampDate.getMonth() 
+      && today.getDate() === timestampDate.getDate()) {
+      return (
+        <div style={{ fontSize: "30px", fontWeight: "lighter", color: "#343434" }}>
+          <Button
+            style={{ width: "130px", height: "40px", fontSize: "14px", fontWeight: "lighter", backgroundColor: "#ffffff", color: "#343434" }}
+            disabled
+            type="dashed"
+          >
+            Complete
+          </Button>
         </div>  
       );
     }
+
     const uploadButton = (
       <div>
         <Icon type={this.state.loading ? 'loading' : 'plus'} />
@@ -189,7 +224,7 @@ class ProofSubmitStatus extends Component {
           style={{ width: "130px", height: "40px", fontSize: "14px", fontWeight: "lighter", color: "white", backgroundColor: "#1890ff" }}
           onClick={this.openModal}
         >
-          Proof it
+          Prove it
         </Button>
         <Modal
           title="Submit Proof"

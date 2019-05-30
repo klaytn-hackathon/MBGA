@@ -145,10 +145,10 @@ class InputDatePage extends Component {
             </div>
           }
         >
-          <div>{this.props.contract.projectName}</div>
-          <div>{this.props.contract.betAmount} KLAY</div>
-          <div>{new Date(this.props.contract.startTime * 1000).toDateString()}</div>
-          <div>{new Date(this.props.contract.endTime * 1000 - 3600000 * 24).toDateString()}</div>
+          <div><b>Project Title : </b>{this.props.contract.projectName}</div>
+          <div><b>Project Value : </b>{this.props.contract.betAmount} KLAY</div>
+          <div><b>Start Date : </b>{new Date(this.props.contract.startTime * 1000).toDateString()} 00:00:00</div>
+          <div><b>End Date : </b>{new Date(this.props.contract.endTime * 1000 - 3600000 * 24).toDateString()} 23:59:59</div>
         </Modal>
       </div>
     );
