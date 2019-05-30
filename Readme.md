@@ -5,7 +5,7 @@ Poc(Klaytn dapp hackathon)
 
 author: Team MBGA
 
-Deployed Page connecting with Klaytn Baobab testnet: [poc](https://poc.mbga.dev)
+Deployed Page connecting with Klaytn Baobab testnet: [poc]()
 
 Deployed Contract Address: 0xb0980a73aca067c1dd8d0cc6f82ae2d27e2f866e
 
