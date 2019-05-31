@@ -14,8 +14,15 @@ class ProofSubmitStatus extends Component {
   }
 
   openModal = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;
+    const monthStr = month < 10 ? `0${month}` : `${month}`;
+    const date = today.getDate();
+    const dateStr = date < 10 ? `0${date}` : `${date}`;
     this.setState({
-      visible: true
+      visible: true,
+      title: `${year}-${monthStr}-${dateStr}`,
     });
   }
   
@@ -263,7 +270,6 @@ class ProofSubmitStatus extends Component {
           </Upload>
           <div>Title</div>
           <Input
-            placeholder="2018-00-00 Proof"
             name="title"
             value={this.state.title}
             margin="normal"
