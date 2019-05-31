@@ -50,17 +50,16 @@ class InputDatePage extends Component {
         this.props.contract.endTime
       ).estimateGas({ 
         from: this.props.auth.values.address, 
-        value: cav.utils.toPeb(this.props.contract.betAmount),
+        value: cav.utils.toPeb(`${this.props.contract.betAmount}`),
       });
     
-      console.log(gasAmount);
       contract.methods.createProject(this.props.contract.projectName,
         "",
         this.props.contract.startTime,
         this.props.contract.endTime
       ).send({ 
         from: this.props.auth.values.address, 
-        value: cav.utils.toPeb(this.props.contract.betAmount),
+        value: cav.utils.toPeb(`${this.props.contract.betAmount}`),
         gas: gasAmount
       }).on('transactionHash', (hash) => {
         console.log(hash);
@@ -80,6 +79,7 @@ class InputDatePage extends Component {
         });
       });
     } catch (e) {
+      console.log(e.message);
       this.setState({
         loading: false,
       });
