@@ -5,7 +5,7 @@ Poc(Klaytn dapp hackathon)
 
 author: Team MBGA
 
-Deployed Page connecting with Klaytn Baobab testnet: [poc](https://poc.mbga.dev)
+Deployed Page connecting with Klaytn Baobab testnet: [Poc Page](https://poc.mbga.dev)
 
 Deployed Contract Address: 0xb0980a73aca067c1dd8d0cc6f82ae2d27e2f866e
 
@@ -17,7 +17,9 @@ contracts folder: Smart Contract(only using DodoRepository.sol)
 
 ### 2. What is Trying to be Solved Through Blockchain?
 
-I want to help people make habits. Easily, this bapp is a decentralized version of the existing https://gofuckingdoit.com. I want to make an app that can expect rewards and guarantee transparency. The previous model pays money in the event of failure and, get money back in the case of success. There is no additional reward. Another problem is that existing apps have centralized operators, which can lead to failure for the benefit of the operator. We will solve this probliem by decentralized oracle.
+We want to help people make habits. Easily, this bapp is a decentralized version of the existing https://gofuckingdoit.com. We want to make an app that can expect rewards and guarantee transparency. The previous model pays money in the event of failure and, get money back in the case of success. There is no additional reward. Another problem is that existing apps have centralized operators, which can lead to failure for the benefit of the operator. We will solve this probliem by decentralized oracle.
+
+Klayton platform fits well with our bapp, which needs to interact with the user because of its fast block creation speed.
 
 ### 3. Main Features of the Service
 
@@ -26,6 +28,8 @@ Create Challenge, submit the proof of the challenge, judge the proof of the chal
 ### 4. How to use Smart contract
 
 ![user <-> smart contract interaction](https://user-images.githubusercontent.com/7679722/58646469-5fce1e00-8340-11e9-9435-2fb69d273a9d.png)
+
+contract address: 0xb0980a73aca067c1dd8d0cc6f82ae2d27e2f866e
 
 Excepting store large data like photo or video, all user data will be stored on Smart Contract.
 
@@ -40,7 +44,6 @@ If project fails, klaytn will not send to challenger. 15 percent of the returned
 
 This (100-15-n) percent will distribute the bonus holders who settle the token rewards to those who have succeeded in the project, and the tokens rewards given by the judges of the project judges appropriately.
 
-
 I do not expect the Klayton token price, so I will try to calculate it with fiat money. Personally, at least one in five people think the project will fail. When I saw the app called Challenges, there were many people who put about 50,000 won in about two weeks. Assuming 100,000 won per month and assuming about 10,000 people a month (please!), 1 billion * ⅕ * n / 100 = 2 million won * n is considered to be the expected profit. I personally think that n is up to 20, and there are many people who participate, or a way to reduce n as the service gets established.
 
 In short, our profits are the fees of the losers.
@@ -48,7 +51,8 @@ In short, our profits are the fees of the losers.
 ### 5-2. What is the expected outcome?
 
 From a technical point of view, we expect to be able to help provide decentralized Oracle services.
-In general, our goal is to make it easier for people to access blockchain. Our Bapp is a topic that is not subject to public objection, and it will be helpful for future influx of Klaytn main net.
+
+In general, our goal is to make it easier for people to access blockchain. You can be recognized by others by certifying someone's challenge in a block chain. During the challenge, user can make money by contribution to the community. Also, our Bapp is a topic that is not subject to public objection, and it will be helpful for future influx of Klaytn main net. We are hoping that a good move will happen as a person notices his or her successful habits creation process.
 
 ### 6. Further Idea
 
